@@ -1,1 +1,1 @@
-Based Java SpringBoot + Mysql
+Based on Java8 SpringBoot and  Mysql
