@@ -69,6 +69,33 @@ public class ProductDAO {
         return jdbcTemplate.query(sb.toString(), new ProductRowMapper());
     }
 
+    public List<Product> getProductList(){
+        return jdbcTemplate.query("select * from product", new ProductRowMapper());
+    }
+
+    public void deleteProductById(Integer id){
+        jdbcTemplate.update("delete from product where id = ?", new Object[]{id});
+    }
+
+    public int saveProduct(Product product){
+        Integer id = product.getId();
+        System.out.println("#####id###"+id);
+        if(id == null){
+            return jdbcTemplate.update("insert into product(cat_id, brand_id, name, spec, unit, trade_price, " +
+                            "retail_price, amount, code, origin, period) values (?,?,?,?,?,?,?,?,?,?,?)",
+                    new Object[]{product.getCatId(), product.getBrandId(), product.getName(), product.getSpec(),
+                    product.getUnit(), product.getTradePrice(), product.getRetailPrice(), product.getAmount(),
+                    product.getCode(), product.getOrigin(), product.getPeriod()});
+        } else {
+            StringBuilder sql = new StringBuilder();
+            sql.append("update product set cat_id = ?, brand_id = ?, name = ?, spec = ?, unit = ?, trade_price = ?,")
+               .append("retail_price = ?, amount = ?, code = ?, origin = ?, period = ?  where id = ?");
+            return jdbcTemplate.update(sql.toString(), new Object[]{product.getCatId(), product.getBrandId(), product.getName(), product.getSpec(),
+                    product.getUnit(), product.getTradePrice(), product.getRetailPrice(), product.getAmount(),
+                    product.getCode(), product.getOrigin(), product.getPeriod(), product.getId()});
+        }
+    }
+
     class ProductRowMapper implements RowMapper<Product> {
         @Override
         public Product mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -86,7 +113,7 @@ public class ProductDAO {
             product.setImageSrc(resultSet.getString("image_src"));
             product.setCode(resultSet.getString("code"));
             product.setOrigin(resultSet.getString("origin"));
-            product.setPeroid(resultSet.getString("period"));
+            product.setPeriod(resultSet.getString("period"));
             return product;
         }
     }

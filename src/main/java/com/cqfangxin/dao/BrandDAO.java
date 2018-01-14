@@ -52,7 +52,6 @@ public class BrandDAO {
                 return null;
             }
         });
-        System.out.println(brandMap);
         return new ArrayList<>(brandMap.values());
     }
 

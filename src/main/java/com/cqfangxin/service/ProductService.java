@@ -33,4 +33,16 @@ public class ProductService {
     public List<Product> searchProductsByName(String keyword){
         return productDAO.searchProductsByName(keyword);
     }
+
+    public List<Product> getProductList(){
+        return productDAO.getProductList();
+    }
+    public void deleteProductById(Integer id){
+        productDAO.deleteProductById(id);
+    }
+
+    public int saveProduct(Product product){
+        return productDAO.saveProduct(product);
+    }
+
 }

@@ -16,7 +16,7 @@ public class Product {
     private String imageSrc;
     private String code;
     private String origin;
-    private String peroid;
+    private String period;
     private List<ProductImage> images;
 
     public Product(){
@@ -130,12 +130,12 @@ public class Product {
         this.origin = origin;
     }
 
-    public String getPeroid() {
-        return peroid;
+    public String getPeriod() {
+        return period;
     }
 
-    public void setPeroid(String peroid) {
-        this.peroid = peroid;
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
     public List<ProductImage> getImages() {
@@ -145,4 +145,5 @@ public class Product {
     public void setImages(List<ProductImage> images) {
         this.images = images;
     }
+
 }
