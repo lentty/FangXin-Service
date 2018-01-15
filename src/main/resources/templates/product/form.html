@@ -4,18 +4,6 @@
 <head>
     <title>产品编辑</title>
     <div th:replace="head"></div>
-    <!--script language="JavaScript" type="text/javascript">
-        function getCategory(){
-           var sltBrand = document.form.brand;
-           var sltCategory = document.form.category;
-           console.log(${brandList});
-           var selectedCate = ${brandList[sltBrand.selectedIndex-1].cateList};
-           sltCategory.length = 1;
-           for(var i=0; i < selectedCate.length; i++){
-              sltCategory[i+1] = new Option(selectedCate[i],selectedCate[i]);
-           }
-        }
-  </script-->
 </head>
 
 <body>
@@ -285,7 +273,8 @@
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">品牌</label>
                                         <div class="col-lg-5">
-                                            <select class="form-control" name="brand" onChange="getCategory()" th:field="*{brandId}" >
+                                            <select class="form-control" name="brand" onChange="getCategory(this.value)"
+                                              th:field="*{brandId}" >
                                                 <option th:each="item:${brandList}" th:value="${item.id}" th:text="${item.name}"
                                                      th:selected="${product}? (${item.id} == ${product.brandId})"></option>
                                             </select>
@@ -390,7 +379,26 @@
 <!-- Custom Theme JavaScript -->
 <script src="../dist/js/sb-admin-2.js"></script>
 
+<script th:inline="javascript" >
+        function getCategory(val){
+             var brandList = /*[[${brandList}]]*/;
+             var options;
+             brandList.forEach(function(item){
+                 if(item.id == val){
+                      options = item.cateList;
+                 }
+             });
+             var catSelect = document.getElementById("catId");
+             $("#catId").empty();
+             console.log(options);
+             options.forEach(function(item){
+                catSelect.options.add(new Option(item.name, item.id));
+             });
+    }
+</script>
+
 
 </body>
 
 </html>
+

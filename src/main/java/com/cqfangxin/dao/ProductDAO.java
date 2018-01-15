@@ -79,7 +79,6 @@ public class ProductDAO {
 
     public int saveProduct(Product product){
         Integer id = product.getId();
-        System.out.println("#####id###"+id);
         if(id == null){
             return jdbcTemplate.update("insert into product(cat_id, brand_id, name, spec, unit, trade_price, " +
                             "retail_price, amount, code, origin, period) values (?,?,?,?,?,?,?,?,?,?,?)",

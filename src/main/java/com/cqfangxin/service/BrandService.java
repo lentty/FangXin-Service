@@ -16,4 +16,8 @@ public class BrandService {
     public List<Brand> getBrandList(){
         return brandDao.getBrandList();
     }
+
+    public List<Brand> getAllBrands(){
+        return brandDao.getAllBrands();
+    }
 }

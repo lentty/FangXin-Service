@@ -68,4 +68,19 @@ public class BrandDAO {
                     }
                 });
     }
+
+    public List<Brand> getAllBrands(){
+        return jdbcTemplate.query("select * from brand ", new BrandRowMapper());
+    }
+
+    class BrandRowMapper implements RowMapper<Brand> {
+        @Override
+        public Brand mapRow(ResultSet resultSet, int i) throws SQLException {
+            Brand brand = new Brand();
+            brand.setId(resultSet.getInt("brand_id"));
+            brand.setName(resultSet.getString("brand_name"));
+            brand.setStatus(resultSet.getInt("brand_status"));
+            return brand;
+        }
+    }
 }
