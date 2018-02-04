@@ -24,13 +24,13 @@ public class ProductDAO {
     }
 
     public List<Product> getProductById(Integer productId){
-        List<Product> productList = jdbcTemplate.query("select * from product where id =  ? and status != 0",
+        List<Product> productList = jdbcTemplate.query("select * from product where id =  ?",
                 new Object[]{productId}, new ProductRowMapper());
         if(productList == null || productList.isEmpty()){
             return Collections.emptyList();
         }
         Product product = productList.get(0);
-        List<ProductImage> images = jdbcTemplate.query("select * from product_image where product_id = ? and status != 0 ",
+        List<ProductImage> images = jdbcTemplate.query("select * from product_image where product_id = ?",
                 new Object[]{productId}, new RowMapper<ProductImage>() {
                     @Override
                     public ProductImage mapRow(ResultSet resultSet, int i) throws SQLException {

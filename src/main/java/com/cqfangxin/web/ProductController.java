@@ -63,16 +63,15 @@ public class ProductController {
 
     @RequestMapping(value="/edit",method = RequestMethod.GET)
     public String editProduct(@RequestParam(name = "id")Integer id, Model model){
-        model.addAttribute("product", productService.getProductById(id));
         model.addAttribute("brandList", brandService.getBrandList());
-        model.addAttribute("productInfo", new Product());
+        model.addAttribute("product", productService.getProductById(id));
         return "product/form";
     }
 
     @RequestMapping(value="/add",method = RequestMethod.GET)
     public String addNewProduct(Model model){
         model.addAttribute("brandList", brandService.getBrandList());
-        model.addAttribute("productInfo", new Product());
+        model.addAttribute("product", new Product());
         return "product/form";
     }
 
@@ -83,9 +82,8 @@ public class ProductController {
     }
 
     @RequestMapping(value="/save", method = RequestMethod.POST)
-    public String saveProduct(@ModelAttribute Product productInfo, Model model){
-       productService.saveProduct(productInfo);
-       model.addAttribute("list", productService.getProductList());
-       return "product/admin";
+    public String saveProduct(@ModelAttribute Product product, Model model){
+       productService.saveProduct(product);
+       return "redirect:/product/admin";
     }
 }

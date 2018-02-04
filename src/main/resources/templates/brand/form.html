@@ -2,7 +2,7 @@
 <html lang="cn" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>产品编辑</title>
+    <title>品牌编辑</title>
     <div th:replace="head"></div>
 </head>
 
@@ -12,6 +12,17 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+        </div>
+        <!-- /.navbar-header -->
+
         <div th:replace="toplinks"></div>
         <!-- /.navbar-top-links -->
 
@@ -22,7 +33,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">编辑产品</h1>
+                <h1 class="page-header">编辑品牌</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -35,19 +46,20 @@
                     </div>
                     <div class="panel-body">
                             <div class="col-lg-12">
-                                <form class="form-horizontal" name="form" th:action="@{/product/save}" method="post" th:object="${product}">
-                                    <input  class="form-control"  th:field="*{id}" type="hidden"/>
+                                <form class="form-horizontal" name="form" th:action="@{/product/save}" method="post" th:object="${productInfo}">
+                                    <input class="form-control"  th:value="${product}? ${product.id}"
+                                           th:field="*{id}" type="hidden"/>
                                     <div class="form-group">
-                                        <label for="code" class="col-lg-1 control-label" >条形码</label>
+                                        <label class="col-lg-1 control-label" >条形码</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
-                                                   th:field="*{code}" id="code" required="required" maxlength="30"/>
+                                            <input class="form-control" type="text" th:value="${product}? ${product.code}"
+                                                   th:field="*{code}" required="required" maxlength="30"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">名称</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
+                                            <input class="form-control" type="text" th:value="${product}? ${product.name}"
                                                    th:field="*{name}" required="required" maxlength="50"/>
                                         </div>
                                     </div>
@@ -74,56 +86,56 @@
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">规格</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
+                                            <input class="form-control" type="text" th:value="${product}? ${product.spec}"
                                                    th:field="*{spec}"  maxlength="30"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">单位</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
+                                            <input class="form-control" type="text" th:value="${product}? ${product.unit}"
                                                    th:field="*{unit}"  maxlength="30"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">批发价</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="number"
+                                            <input class="form-control" type="number" th:value="${product}? ${product.tradePrice}"
                                                    th:field="*{tradePrice}" maxlength="16"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label" >零售价</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="number"
+                                            <input class="form-control" type="number" th:value="${product}? ${product.retailPrice}"
                                                    th:field="*{retailPrice}" maxlength="16"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">库存</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="number"
+                                            <input class="form-control" type="number" th:value="${product}? ${product.amount}"
                                                    th:field="*{amount}" maxlength="16"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">图片</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="file"
+                                            <input class="form-control" type="file" th:value="${product}? ${product.imageSrc}"
                                                    th:field="*{imageSrc}" maxlength="16"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">产地</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
+                                            <input class="form-control" type="text" th:value="${product}? ${product.origin}"
                                                    th:field="*{origin}" maxlength="16"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-1 control-label">保质期</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" type="text"
+                                            <input class="form-control" type="text" th:value="${product}? ${product.period}"
                                                    th:field="*{period}" maxlength="16"/>
                                         </div>
                                     </div>
@@ -162,7 +174,7 @@
 
 <script th:inline="javascript" >
         function getCategory(val){
-             var brandList = [[${brandList}]];
+             var brandList = /*[[${brandList}]]*/;
              var options;
              brandList.forEach(function(item){
                  if(item.id == val){
@@ -170,25 +182,12 @@
                  }
              });
              var catSelect = document.getElementById("catId");
-             var product = [[${product}]];
-             var selectedCat = product.catId;;
-             console.log("selected cat:" + selectedCat);
              $("#catId").empty();
              console.log(options);
              options.forEach(function(item){
-                var opt = new Option(item.name, item.id);
-                if(selectedCat){
-                   if(selectedCat == item.id){
-                     opt.selected = true;
-                   }
-                }
-                catSelect.options.add(opt);
+                catSelect.options.add(new Option(item.name, item.id));
              });
-        };
-        window.onload=function(){
-           var val = document.getElementById("brandId").value;
-           getCategory(val);
-        }
+    }
 </script>
 
 
