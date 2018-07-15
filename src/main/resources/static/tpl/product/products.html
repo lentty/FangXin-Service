@@ -1,0 +1,379 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="app.settings.asideFolded = false; app.settings.asideDock = false;"></div>
+
+<!--main-->
+<div class="col"  ng-controller="ProductCtrl" >
+    <!--mian header-->
+    <div >
+        <div class="bg-light lter b-b my-nav wrapper-sm">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
+                        您当前所在的位置：<a ui-sref="app.rooms" class="my-address">产品信息列表</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md">
+            <div class="panel panel-default" style="position: relative; padding-top: 20px;">
+                <div class="table-responsive " style="overflow-x: hidden;"  >
+                    <section class="">
+                        <div class="col-xs-10">
+                            <div >
+                                <div class="col-xs-2 no-padding-left no-padding-right">
+                                    <button class="btn box-shadow my-button bg-info" ng-click="editProduct(null)" >
+                                        <i class="fa fa-floppy-o bigger-120"></i>
+                                        <span>添加新产品</span>
+                                    </button>
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <select ng-model="orderProp" class="form-control">
+                                        <option value="tradePrice">批发价</option>
+                                        <option value="retailPrice">零售价</option>
+                                        <option value="amount">库存</option>
+                                        <option value="lastModifiedDate">最近修改时间</option>
+                                    </select>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                    <form class="form-inline" style="padding-top: 15px;">
+
+                        <table class="table row-border hover table-striped dataTables_wrapper form-inline">
+                            <thead>
+                                <tr style="font-size: 16px;">
+                                    <th class="text-center">产品条码</th>
+                                    <th class="text-center">产品名称</th>
+                                    <th class="text-center">规格</th>
+                                    <th class="text-center">批发价</th>
+                                    <th class="text-center">零售价</th>
+                                    <th class="text-center">库存</th>
+                                    <th class="text-center">状态</th>
+                                    <th class="text-center">图片管理</th>
+                                    <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in products | filter: $ctrl.query | orderBy: orderProp" on-finish-render>
+                                    <td class="text-center">{{product.code}}</td>
+                                    <td class="text-center">{{product.name}}</td>
+                                    <td class="text-center">{{product.spec}}</td>
+                                    <td class="text-center">￥{{product.tradePrice}}</td>
+                                    <td class="text-center">￥{{product.retailPrice}}</td>
+                                    <td class="text-center">{{product.amount}}</td>
+                                    <td class="text-center" ng-switch="{{product.status}}">
+                                        <span ng-switch-when="0">已下架</span>
+                                        <span ng-switch-when="1">正常</span>
+                                        <span ng-switch-when="2">特价</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a ui-sref="app.product({productId: product.id})">
+                                            <span class="glyphicon glyphicon-edit"  title="编辑"></span>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="dropdown">
+                                            <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)"
+                                               role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-tasks fa-fw"></i>更多操作<b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <li class="dropdown-item">
+                                                    <button class="btn" ng-click="getProductDetail(product.id)">查看详情</button>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li class="dropdown-item">
+                                                    <button class="btn" ng-click="editProduct(product.id)">更改信息</button>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li class="dropdown-item">
+                                                    <button class="btn" ng-click="deleteProduct(product.id, product.name)">删除产品</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <div style="float: left; padding: 20px 0 0 36px;">共{{totalItems}}条数据</div>
+                            <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
+                                        previous-text="上一页" next-text="下一页" ng-change="getData()"></pagination>
+                            <div style="clear: both;"></div>
+                        </div>
+
+                    </form>
+
+                    <!--产品详情弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="getProductDetail.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    产品详情
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body user-modal">
+                                <div class="user-modal-content">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>产品条码</td>
+                                                <td>{{product.code}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>产品名称</td>
+                                                <td>{{product.name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>品牌</td>
+                                                <td>{{product.brand.name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>分类</td>
+                                                <td>{{product.category.name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>状态</td>
+                                                <td>{{p_status}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>规格</td>
+                                                <td>{{product.spec}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>单位</td>
+                                                <td>{{product.unit}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>批发价</td>
+                                                <td>￥{{product.tradePrice}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>零售价</td>
+                                                <td>￥{{product.retailPrice}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>库存</td>
+                                                <td>{{product.amount}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>产地</td>
+                                                <td>{{product.origin}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>保质期</td>
+                                                <td>{{product.period}}</td>
+                                            </tr>
+                                            <tr ng-repeat="detail in product.details">
+                                                <td>{{detail.attriKey}}</td>
+                                                <td>{{detail.attriValue}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>创建人</td>
+                                                <td>{{product.createBy}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>创建时间</td>
+                                                <td>{{product.createDate}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>最近修改人</td>
+                                                <td>{{product.lastModifiedBy}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>最近修改时间</td>
+                                                <td>{{product.lastModifiedDate}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+
+                    <!--添加/编辑产品弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="editProduct.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    产品编辑
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <form class="form-horizontal" name="form" class="form-validation">
+                                <div class="modal-body user-modal">
+                                    <div class="user-modal-content" >
+                                        <div class="row" style="padding-top: 10px;">
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">产品条码</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.code" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">产品名称</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">品牌分类</label>
+                                                <div class="form-inline col-sm-5">
+                                                    <select class="form-control" style="width: auto" ng-model="brand" ng-options="item.name for item in brandList">
+                                                        <option value="">请选择品牌</option>
+                                                    </select>
+                                                    <select class="form-control" style="width: auto" ng-model="category" ng-options="data.name for data in brand.cateList">
+                                                        <option value="">请选择分类</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right">状态</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control" style="width: auto" ng-model="product.status" required>
+                                                        <option value="0" ng-selected="product.status == 0">下架</option>
+                                                        <option value="1" ng-selected="product.status == 1">正常</option>
+                                                        <option value="2" ng-selected="product.status == 2">特价</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">产品规格</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.spec" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">单位</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.unit" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">批发价</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.tradePrice" required>
+                                                </div>
+                                           </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">零售价</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.retailPrice" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">库存</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.amount" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">产地</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.origin">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">保质期</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="product.period" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-repeat="detail in product.details">
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="form-control" ng-model="detail.attriKey" required>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="detail.attriValue" required>
+                                                </div>
+                                                <button class="btn" type="button" ng-click="deleteAttribute($index)">删除属性</button>
+                                            </div>
+                                            <div class="form-group">
+                                              <u class="col-sm-2 no-padding-right text-right" ng-click="addAttribute($index)">添加更多属性</u>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                                </div>
+                                <div class="modal-footer" style="text-align: center;">
+                                    <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                        <i class="fa fa-check ace-icon bigger-110"></i>
+                                        保存
+                                    </button>
+                                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                        <i class="fa fa-close ace-icon bigger-110"></i>
+                                        关闭
+                                    </button>
+                                </div>
+                            </form>
+                        </script>
+                    </div>
+                    <!--删除提示框-->
+                    <div>
+                        <script type="text/ng-template" id="deleteProductConfirmation.html" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    提示
+                                    <span class="pull-right my-cancel">
+                                            <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                                        </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="my-modal-content">
+                                    <i class="fa fa-question-circle fa-3x text-warning warning-icon"></i>
+                                    &nbsp;&nbsp;是否确定删除产品&nbsp;{{name}}&nbsp;？
+                                </div>
+                                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                            </div>
+                            <div class="modal-footer info-modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                                <button class="btn btn-default" ng-click="cancel()">取消</button>
+                            </div>
+                        </script>
+                    </div>
+                    <!--修改成功弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="editEnd.html" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    提示
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+
+                            </div>
+                            <div class="modal-body">
+                                <div class="my-modal-content">
+                                    <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                                    <i class="fa fa-smile-o fa-3x text-success" ng-if="flag === 1"></i>
+                                    <i class="fa fa-frown-o fa-3x text-warning" ng-if="flag === 2"></i>
+                                    &nbsp;&nbsp;{{message}}
+                                </div>
+
+                            </div>
+                            <div class="modal-footer info-modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,95 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="
+    app.settings.asideFolded = false;
+    app.settings.asideDock = false;
+">
+
+    <!--mian-->
+    <div class="col">
+        <!--mian header-->
+        <div class="bg-light lter b-b wrapper-sm">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
+                        您当前所在的位置：<a ui-sref="app.dashboard" class="my-address">首页</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <!--mian header-->
+        <div class="wrapper-md" ng-controller="FlotChartDemoCtrl">
+            <!--stats-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row row-sm text-center">
+                        <div class="col-xs-3">
+                            <div class="panel padder-v item">
+                                <div class="h1 text-info font-thin">{{datas.numOfBrand}}</div>
+                                <span class="text-muted text-xs">品牌</span>
+                                <div class="top text-right w-full">
+                                    <i class="fa fa-caret-down text-info m-r-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <a href="" class="block panel padder-v bg-primary item">
+                                <span class="text-white font-thin h1 block">{{datas.numOfPromotedProduct}}</span>
+                                <span class="text-muted text-xs">特价商品</span>
+                                <span class="bottom text-right w-full">
+                                    <i class="fa fa-caret-up text-info m-r-sm"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-xs-3">
+                            <a href="" class="block panel padder-v bg-info item">
+                                <span class="text-white font-thin h1 block">{{datas.numOfProduct}}</span>
+                                <span class="text-muted text-xs">商品</span>
+                                <span class="top text-left">
+                                    <i class="fa fa-caret-up text-warning m-l-sm"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-xs-3">
+                            <a href="" class="block panel padder-v item">
+                                <span class="font-thin h1 block">{{datas.numOfUser}}</span>
+                                <span class="text-muted text-xs">客户</span>
+                                <span class="bottom text-right w-full">
+                                    <i class="fa fa-caret-up text-info m-l-sm"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="panel hbox hbox-auto-xs no-border">
+                        <div class="col wrapper">
+                            <i class="fa fa-circle-o text-info m-r-sm pull-right"></i>
+                            <h4 class="font-thin m-t-none m-b-none text-primary-lt">成交量</h4>
+                            <span class="m-b block text-sm text-muted">2016年数据</span>
+                            <div ui-jq="plot" ui-options="
+                        [
+                            { data: {{d5}},
+                              lines: { show: true, lineWidth: 1, fill:true, fillColor: { colors: [{opacity: 0.2}, {opacity: 0.8}] } }
+                            }
+                        ],
+                        {
+                          colors: ['{{app.color.light}}'],
+                          series: { shadowSize: 5 },
+                          xaxis:{ show: true, ticks: {{month}} },
+                          yaxis:{ font: { color: '#a1a7ac' } },
+                          grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },
+                          tooltip: true,
+                          tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+                        }
+                      " style="height:240px" >
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

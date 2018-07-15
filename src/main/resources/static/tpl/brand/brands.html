@@ -1,0 +1,232 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="app.settings.asideFolded = false; app.settings.asideDock = false;"></div>
+
+<!--main-->
+<div class="col"  ng-controller="BrandCtrl" >
+    <!--mian header-->
+    <div >
+        <div class="bg-light lter b-b my-nav wrapper-sm">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
+                        您当前所在的位置：<a ui-sref="app.brands" class="my-address">品牌信息列表</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md">
+            <div class="panel panel-default" style="position: relative; padding-top: 20px;">
+                <div class="table-responsive " style="overflow-x: hidden;"  >
+                    <section class="">
+                        <div class="col-xs-10">
+                            <div >
+                                <div class="col-xs-2 no-padding-left no-padding-right">
+                                    <button class="btn box-shadow my-button bg-info" ng-click="upsertBrand(null)" >
+                                        <i class="fa fa-floppy-o bigger-120"></i>
+                                        <span>添加新品牌</span>
+                                    </button>
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <select ng-model="orderProp" class="form-control">
+                                        <option value="lastModifiedDate">最近修改时间</option>
+                                    </select>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                    <form class="form-inline" style="padding-top: 15px;">
+
+                        <table class="table row-border hover table-striped dataTables_wrapper form-inline">
+                            <thead>
+
+                            <tr style="font-size: 16px;">
+                                <th class="text-center">品牌名称</th>
+                                <th class="text-center">最近修改时间</th>
+                                <th class="text-center">最近修改人</th>
+                                <th class="text-center">上/下架</th>
+                                <th class="text-center">分类管理</th>
+                                <th class="text-center">修改</th>
+                                <th class="text-center">删除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="brand in brands | filter: $ctrl.query" on-finish-render>
+                                <td class="text-center">{{brand.name}}</td>
+                                <td class="text-center">{{brand.lastModifiedDate}}</td>
+                                <td class="text-center">{{brand.lastModifiedBy}}</td>
+                                <td class="text-center">{{brand.status ? '正常' : '下架'}}</td>
+                                <td class="text-center">
+                                    <a ui-sref="app.brand({brandId: brand.id})">
+                                        <span class="glyphicon glyphicon-edit"  title="编辑"></span>
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs" type="button" ng-click="upsertBrand(brand)"><i class="fa fa-eye text-success fa-2x"></i></button>
+                                </td>
+                                <td class="text-center">
+                                  <span name="trash" title="删除"
+                                  style="cursor: pointer" class="glyphicon glyphicon-trash" ng-click="deleteBrand(brand.id, brand.name)"></span>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <div style="float: left; padding: 20px 0 0 36px;">共{{totalItems}}条数据</div>
+                            <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
+                                        previous-text="上一页" next-text="下一页" ng-change="getData()"></pagination>
+                            <div style="clear: both;"></div>
+                        </div>
+
+                    </form>
+
+
+                    <!--添加/编辑品牌弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="upsertBrand.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    添加品牌
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <form class="form-horizontal" name="form" class="form-validation">
+                                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                                <div class="modal-body user-modal" style="height: 150px">
+                                    <div class="user-modal-content" >
+                                        <div class="row" style="padding-top: 10px;">
+                                            <div class="form-group" >
+                                                <label class="col-sm-4 control-label no-padding-right">品牌名称</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="brand.name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label no-padding-right">状态</label>
+                                                <div class="col-sm-5">
+                                                    <select  class="form-control"  ng-model="brand.status">
+                                                        <option value="true" ng-selected="brand.status == true">上架</option>
+                                                        <option value="false" ng-selected="brand.status == false">下架</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer" style="text-align: center;">
+                                    <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                        <i class="fa fa-check ace-icon bigger-110"></i>
+                                        保存
+                                    </button>
+                                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                        <i class="fa fa-close ace-icon bigger-110"></i>
+                                        关闭
+                                    </button>
+                                </div>
+                            </form>
+                        </script>
+                    </div>
+                    <!--修改房间弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="editRoom.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    修改房间状态
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <form class="form-horizontal" name="form" class="form-validation">
+                                <div class="modal-body admin-modal text-center">
+                                    <div class="my-modal-content" >
+                                        <label style=" margin-right: 10px; " class="my-label">状态:
+                                            <select style="padding: 5px;" ng-model="state">
+                                                <option value="1">通过</option>
+                                                <option value="0">未通过</option>
+                                            </select>
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer" style="text-align: center;">
+
+                                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                        <i class="fa fa-close ace-icon bigger-110"></i>
+                                        关闭
+                                    </button>
+                                    <button class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                        <i class="fa fa-check ace-icon bigger-110"></i>
+                                        修改
+                                    </button>
+                                </div>
+                            </form>
+                        </script>
+                    </div>
+                    <!--删除提示框-->
+                    <div>
+                        <script type="text/ng-template" id="deleteBrandConfirmation.html" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    提示
+                                    <span class="pull-right my-cancel">
+                                            <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                                        </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="my-modal-content">
+                                    <i class="fa fa-question-circle fa-3x text-warning warning-icon"></i>
+                                    &nbsp;&nbsp;是否确定删除品牌&nbsp;{{name}}&nbsp;？
+                                </div>
+                                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                            </div>
+                            <div class="modal-footer info-modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                                <button class="btn btn-default" ng-click="cancel()">取消</button>
+                            </div>
+                        </script>
+                    </div>
+                    <!--修改成功弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="editEnd.html" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    提示
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+
+                            </div>
+                            <div class="modal-body">
+                                <div class="my-modal-content">
+                                    <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                                    <i class="fa fa-smile-o fa-3x text-success" ng-if="flag === 1"></i>
+                                    <i class="fa fa-frown-o fa-3x text-warning" ng-if="flag === 2"></i>
+                                    &nbsp;&nbsp;{{message}}
+                                </div>
+
+                            </div>
+                            <div class="modal-footer info-modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

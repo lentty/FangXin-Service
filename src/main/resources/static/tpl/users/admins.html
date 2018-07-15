@@ -1,0 +1,279 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="app.settings.asideFolded = false; app.settings.asideDock = false;"></div>
+
+<!--main-->
+<div class="col"  ng-controller="AdminUserCtrl" >
+    <!--mian header-->
+    <div >
+        <div class="bg-light lter b-b my-nav wrapper-sm">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
+                        您当前所在的位置：<a ui-sref="app.users.admins" class="my-address">管理员列表</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md">
+            <div class="panel panel-default" style="position: relative; padding-top: 20px;">
+                <div class="table-responsive " style="overflow-x: hidden;"  >
+                    <section class="">
+                        <div class="col-xs-10">
+                            <div >
+                                <div class="col-xs-2 no-padding-left no-padding-right">
+                                    <button class="btn box-shadow my-button bg-info" ng-click="editAdmin(null)" >
+                                        <i class="fa fa-floppy-o bigger-120"></i>
+                                        <span>添加管理员</span>
+                                    </button>
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <select ng-model="orderProp" class="form-control">
+                                        <option value="username">用户名</option>
+                                        <option value="lastModifiedDate">最近修改时间</option>
+                                    </select>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                    <form class="form-inline" style="padding-top: 15px;">
+
+                        <table class="table row-border hover table-striped dataTables_wrapper form-inline">
+                            <thead>
+                            <tr style="font-size: 16px;">
+                                <th class="text-center">用户名</th>
+                                <th class="text-center">昵称</th>
+                                <th class="text-center">真实姓名</th>
+                                <th class="text-center">性别</th>
+                                <th class="text-center">电话号码</th>
+                                <th class="text-center">邮箱</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">最近修改时间</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="admin in admins | filter: $ctrl.query | orderBy: orderProp" on-finish-render>
+                                <td class="text-center">{{admin.username}}</td>
+                                <td class="text-center">{{admin.nickname}}</td>
+                                <td class="text-center">{{admin.realname}}</td>
+                                <td class="text-center">{{admin.sex}}</td>
+                                <td class="text-center">{{admin.telephone}}</td>
+                                <td class="text-center">{{admin.email}}</td>
+                                <td class="text-center">{{admin.status ? '已激活' : '未激活'}}</td>
+                                <td class="text-center">{{admin.lastModifiedDate}}</td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)"
+                                           role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-tasks fa-fw"></i>更多操作<b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <li class="dropdown-item">
+                                                <button class="btn" ng-click="getAdminDetail(admin.id)">查看详情</button>
+                                            </li>
+                                            <li class="divider"></li>
+                                            <li class="dropdown-item">
+                                                <button class="btn" ng-click="editAdmin(admin.id)">更改信息</button>
+                                            </li>
+                                            <li class="divider"></li>
+                                            <li class="dropdown-item">
+                                                <button class="btn" ng-click="deleteAdmin(admin.id, admin.username)">删除管理员</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <div style="float: left; padding: 20px 0 0 36px;">共{{totalItems}}条数据</div>
+                            <div style="clear: both;"></div>
+                        </div>
+
+                    </form>
+                    <div>
+                        <script type="text/ng-template" id="editAdmin.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    添加管理员
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <form class="form-horizontal" name="form" class="form-validation">
+                                <div class="modal-body user-modal">
+                                    <div class="user-modal-content" >
+                                        <div class="row" style="padding-top: 10px;">
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">用户名</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="admin.username" required/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">昵称</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="admin.nickname" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">真实姓名</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="admin.realname" required/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">性别</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control" ng-model="admin.sex" required>
+                                                        <option value="女">女</option>
+                                                        <option value="男">男</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">密码</label>
+                                                <div class="col-sm-5">
+                                                    <input type="password" class="form-control" ng-model="admin.password" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">电话号码</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="admin.telephone">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-sm-2 control-label no-padding-right">电子邮箱</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" ng-model="admin.email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right">状态</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control" style="width: auto" ng-model="admin.status" required>
+                                                        <option value="0" ng-selected="admin.status == 0">未激活</option>
+                                                        <option value="1" ng-selected="admin.status == 1">已激活</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                                </div>
+                                <div class="modal-footer" style="text-align: center;">
+                                    <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                        <i class="fa fa-check ace-icon bigger-110"></i>
+                                        保存
+                                    </button>
+                                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                        <i class="fa fa-close ace-icon bigger-110"></i>
+                                        关闭
+                                    </button>
+                                </div>
+                            </form>
+                        </script>
+                    </div>
+                    <!--管理员详情弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="getAdminDetail.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    管理员详情
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body user-modal">
+                                <div class="user-modal-content">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td>用户名</td>
+                                            <td>{{admin.username}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>昵称</td>
+                                            <td>{{admin.nickname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>真实姓名</td>
+                                            <td>{{admin.realname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>性别</td>
+                                            <td>{{admin.sex}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>电话号码</td>
+                                            <td>{{admin.telephone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>邮箱</td>
+                                            <td>{{admin.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>状态</td>
+                                            <td>{{admin.status ? '已激活' : '未激活'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>创建者</td>
+                                            <td>{{admin.createBy}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>创建时间</td>
+                                            <td>{{admin.createDate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>最近修改人</td>
+                                            <td>{{admin.lastModifiedBy}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>最近修改时间</td>
+                                            <td>{{admin.lastModifiedDate}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+                    <!--删除提示框-->
+                    <div>
+                        <script type="text/ng-template" id="deleteAdminConfirmation.html" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    提示
+                                    <span class="pull-right my-cancel">
+                                            <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                                        </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="my-modal-content">
+                                    <i class="fa fa-question-circle fa-3x text-warning warning-icon"></i>
+                                    &nbsp;&nbsp;是否确定删除用户&nbsp;{{username}}&nbsp;？
+                                </div>
+                                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                            </div>
+                            <div class="modal-footer info-modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                                <button class="btn btn-default" ng-click="cancel()">取消</button>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

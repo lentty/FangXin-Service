@@ -1,48 +1,40 @@
 package com.cqfangxin.service;
 
-import com.cqfangxin.dao.ProductDAO;
+import com.cqfangxin.domain.Pagination;
 import com.cqfangxin.domain.Product;
 import com.cqfangxin.domain.ProductImage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class ProductService {
 
-    @Autowired
-    private ProductDAO productDAO;
+public interface ProductService {
 
-    public List<Product> getProductListByCatId(Integer categoryId){
-        return productDAO.getProductListByCatId(categoryId);
-    }
+     List<Product> getProductsByPage(Pagination pagination);
 
-    public Product getProductById(Integer productId){
-        return productDAO.getProductById(productId).get(0);
-    }
+     int getTotalProductCount();
 
-    public List<ProductImage> getPromotedProductImages(){
-        return productDAO.getPromotedProductImages();
-    }
+     int upsertProduct(Product product, String username);
 
-    public List<Product> getPromotedProducts(){
-        return productDAO.getPromotedProducts();
-    }
+     List<Product> getProductListByCatId(Integer categoryId);
 
-    public List<Product> searchProductsByName(String keyword){
-        return productDAO.searchProductsByName(keyword);
-    }
+     Product getProductById(Integer productId);
 
-    public List<Product> getProductList(){
-        return productDAO.getProductList();
-    }
-    public void deleteProductById(Integer id){
-        productDAO.deleteProductById(id);
-    }
+     List<ProductImage> getPromotedProductImages();
 
-    public int saveProduct(Product product){
-        return productDAO.saveProduct(product);
-    }
+     List<Product> getPromotedProducts();
+
+     List<Product> searchProductsByName(String keyword);
+
+     List<Product> getProductList();
+
+     int deleteProductById(Integer id);
+
+     int saveProduct(Product product);
+
+     int editPicById(Integer productId, String imageSrc, String userId);
+
+     int editPicDetailsById(ProductImage image);
+
+     int deleteProductPicById(Integer picId);
 
 }

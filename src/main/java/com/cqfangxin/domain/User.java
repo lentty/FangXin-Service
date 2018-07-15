@@ -1,11 +1,16 @@
 package com.cqfangxin.domain;
 
-public class User {
+public class User extends BaseObject{
      private Integer id;
-     private Integer type; /* 0 normal user, 1 admin*/
+     /**
+      * 0 normal user, 1 admin
+      * */
+     private Integer type;
      private String username;
      private String nickname;
      private String password;
+     private String realname;
+     private String sex;
      private String telephone;
      private String email;
      private Integer status;
@@ -82,4 +87,21 @@ public class User {
     public void setSource(String source) {
         this.source = source;
     }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
 }

@@ -1,33 +1,40 @@
 package com.cqfangxin.web;
 
 import com.cqfangxin.domain.LoginBean;
-import com.cqfangxin.service.ProductService;
+import com.cqfangxin.domain.Result;
+import com.cqfangxin.domain.User;
+import com.cqfangxin.service.UserService;
+import com.cqfangxin.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
 
     @Autowired
-    private ProductService productService;
+    private UserService userService;
 
-    @GetMapping("/login")
-    public String login(Model model) throws IOException {
-        model.addAttribute("loginInfo", new LoginBean());
-        return "login";
+    @RequestMapping(value="/admin/login", method= RequestMethod.POST)
+    @ResponseBody
+    public Result login(@RequestBody LoginBean loginUser, HttpSession session){
+        User admin = userService.getUser(loginUser);
+        if(admin != null){
+            session.setAttribute(Constant.USERINFO, admin);
+            session.setMaxInactiveInterval(60000000);
+            return new Result("success", Constant.LOGIN_SUCCESS, admin);
+        }else{
+            return new Result("fail", Constant.LOGIN_FAIL);
+        }
     }
 
-    @RequestMapping(value="/doLogin", method= RequestMethod.POST)
-    public String doLogin(@ModelAttribute LoginBean loginInfo, Model model){
-        model.addAttribute("list", productService.getProductList());
-        return "index";
-    }
+
+
+
 
 }

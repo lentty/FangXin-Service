@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <properties>
+        <!-- 文件输出格式 -->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} |-%-5level [%thread] %c [%L] -| %msg%n</property>
+    </properties>
+
+    <appenders>
+        <Console name="Console" target="system_out">
+            <PatternLayout pattern="${PATTERN}" />
+        </Console>
+    </appenders>
+    <!--配置mybatis日志-->
+    <loggers>
+        <logger name="com.cqfangxin" level="debug" />
+        <logger name="org.springframework.transaction.interceptor" level="debug" />
+        <root level="info">
+            <appenderref ref="Console" />
+        </root>
+    </loggers>
+
+</configuration>

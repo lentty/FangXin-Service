@@ -1,0 +1,329 @@
+<div class="bg-light lter b-b wrapper-sm">
+    <h1 class="m-n font-thin h5 my-rooms ">
+        您当前所在的位置：<a ui-sref="app.system.admin" class="my-address">管理员管理</a>
+    </h1>
+</div>
+<div class="wrapper-md">
+    <div class="panel panel-default" style="position: relative; padding-top: 20px;">
+        <!--<div class="panel-heading">-->
+        <!--房主信息列表-->
+        <!--</div>-->
+        <div class="table-responsive "  ng-controller="FetchAdminCtrl" >
+            <section  style=""  >
+                <!--<button class="btn box-shadow my-button" ng-click="editSelected();">-->
+                <!--<i class="fa fa-pencil bigger-120"></i>-->
+                <!--<a href >修改</a>-->
+                <!--</button>-->
+
+
+
+                <div class="col-xs-12 text-center">
+                    <div style="padding-left: 150px;">
+                        <div class="col-xs-2 no-padding-left no-padding-right">
+                            <a ui-sref="app.system.addAdmin">
+                                <button class="btn box-shadow my-button">
+                                    <i class="fa fa-floppy-o bigger-120"></i>
+                                    <span>添加</span>
+                                </button>
+                            </a>
+                        </div>
+
+                        <button class="btn box-shadow my-button col-xs-1 no-padding-left no-padding-right" ng-click="deleteSelected();">
+                            <i class="fa fa-times bigger-120"></i>
+                            <a href >删除</a>
+                        </button>
+                        <label class="col-xs-1 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
+                        <div class="col-xs-2 no-padding-left">
+                            <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                        </div>
+                        <label class="col-xs-1 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
+                        <div class="col-xs-2 no-padding-left">
+                            <select ng-model="orderProp" class="form-control">
+                                <option value="userName">用户名</option>
+                                <option value="realName">真实姓名</option>
+                                <option value="createDate">创建时间</option>
+                            </select>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </section>
+            <form class="form-inline" style="padding-top: 15px;">
+                <table class="table row-border hover table-striped dataTables_wrapper form-inline" style="width: 90%; margin: 0 auto;">
+                    <thead>
+
+                    <tr>
+                        <th class="text-center">
+                            <span >
+                                <input type="checkbox" class="my-checkbox" ng-model="master" ng-click="all(master,admins)">
+                            </span>
+                        </th>
+                        <th class="text-center">用户名</th>
+                        <th class="text-center">真实姓名</th>
+                        <th class="text-center">性别</th>
+                        <th class="text-center">电话</th>
+                        <th class="text-center">邮箱</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in admins | filter: $ctrl.query | orderBy: orderProp">
+                        <td class="text-center">
+                            <span>
+                                <input type="checkbox" class="my-checkbox" name="selected" ng-model="x" ng-checked="master" ng-click="select(item.id,x)">
+                            </span>
+                        </td>
+                        <td class="text-center">{{item.userName}}</td>
+                        <td class="text-center">{{item.realName}}</td>
+                        <td class="text-center">{{item.sex}}</td>
+                        <td class="text-center">{{item.telPhone}}</td>
+                        <td class="text-center">{{item.email}}</td>
+                        <td class="text-center">{{item.createDate}}</td>
+                        <td class="text-center">{{item.state}}</td>
+                        <td class="text-center">
+                            <!--<button class="btn btn-xs" type="button" ng-click="viewUser(item.id)"><i class="fa fa-eye text-success fa-2x"></i></button>-->
+                            <button class="btn btn-xs" type="button" ng-click="editUser(item.id)"><i class="fa fa-edit text-info fa-2x"></i></button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <div style="float: left; padding: 20px 0 0 36px;">共{{totalItems}}条数据</div>
+                    <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
+                                previous-text="上一页" next-text="下一页" ng-change="getData()"></pagination>
+                    <div style="clear: both;"></div>
+                </div>
+            </form>
+            <!--确认是否选择了数据-->
+            <div>
+                <script type="text/ng-template" id="myModalContent.html" >
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            提示
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="my-modal-content">
+                            <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                            <i class="fa fa-warning fa-3x text-warning warning-icon" ng-if="flag == 1"></i>
+                            <i class="fa fa-question-circle fa-3x text-warning warning-icon" ng-if="flag == 2"></i>
+                            &nbsp;&nbsp;{{message}}
+                        </div>
+
+                    </div>
+                    <div class="modal-footer info-modal-footer">
+                        <button class="btn btn-primary" ng-click="ok()">确定</button>
+                        <button class="btn btn-default" ng-if="flag === 2" ng-click="cancel()">取消</button>
+                    </div>
+                </script>
+            </div>
+            <!--添加用户弹窗-->
+            <div>
+                <script type="text/ng-template" id="addUser.html">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            添加用户
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+                    </div>
+                    <form class="form-horizontal" name="form" class="form-validation">
+                        <div class="modal-body admin-modal" style="height: 250px">
+                            <div class="my-modal-content" >
+                                <div class="row" style="padding-top: 10px;">
+                                    <div class="form-group" >
+                                        <label class="col-sm-4 control-label no-padding-right">账户</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" placeholder="请输入账户" value="{{user.username}}" ng-model="user.username" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">姓名</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" placeholder="请输入姓名" value="{{user.name}}" ng-model="user.name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">性别</label>
+                                        <div class="col-sm-5">
+                                            <select id="_sex" class="form-control" ng-model="user.sex">
+                                                <option value="女">女</option>
+                                                <option value="男">男</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">地址</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" placeholder="请输入地址" value="{{user.address}}" ng-model="user.address" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right">电话</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" placeholder="请输入地址" value="{{user.telephone}}" ng-model="user.telephone" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer" style="text-align: center;">
+                            <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                <i class="fa fa-check ace-icon bigger-110"></i>
+                                保存
+                            </button>
+                            <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                <i class="fa fa-close ace-icon bigger-110"></i>
+                                关闭
+                            </button>
+                        </div>
+                    </form>
+                </script>
+            </div>
+            <!--修改用户弹窗-->
+            <div>
+                <script type="text/ng-template" id="editUser.html">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            修改用户
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+                    </div>
+                    <form class="form-horizontal" name="form" class="form-validation">
+                        <div class="modal-body admin-modal" style="height: 250px">
+                            <div class="my-modal-content" >
+                                <div class="row text-center" style="padding-top: 10px;">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">用户名</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入用户名" value="{{user.userName}}" ng-model="user.userName" required disabled>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right no-padding-left" >密码</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入密码" value="{{user.password}}" ng-model="user.password" required disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">真实姓名</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入姓名" value="{{user.realName}}" ng-model="user.realName" required disabled>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">性别</label>
+                                        <div class="col-sm-3">
+                                            <select  class="form-control" ng-model="user.sex" disabled>
+                                                <option value="女">女</option>
+                                                <option value="男">男</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">电话</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入电话" value="{{user.telPhone}}" ng-model="user.telPhone" required>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">邮箱</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入邮箱" value="{{user.email}}" ng-model="user.email" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">创建时间</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="" value="{{user.createDate}}" ng-model="user.createDate" disabled>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">状态</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" ng-model="user.userStateId">
+                                                <option value="1">正常</option>
+                                                <option value="2">冻结</option>
+                                                <option value="3">异常</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer" style="text-align: center;">
+                            <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                                <i class="fa fa-check ace-icon bigger-110"></i>
+                                修改
+                            </button>
+                            <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                                <i class="fa fa-close ace-icon bigger-110"></i>
+                                关闭
+                            </button>
+                        </div>
+                    </form>
+                </script>
+            </div>
+            <!--删除提示框-->
+            <div>
+                <script type="text/ng-template" id="remove.html" >
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            提示
+                            <span class="pull-right my-cancel">
+                                            <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                                        </span>
+                        </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="my-modal-content">
+                            <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                            <!--<i class="fa fa-warning fa-3x text-warning warning-icon" ng-if="flag === 1"></i>-->
+                            <i class="fa fa-question-circle fa-3x text-warning warning-icon"></i>
+                            &nbsp;&nbsp;是否确定删除？
+                        </div>
+
+                    </div>
+                    <div class="modal-footer info-modal-footer">
+                        <button class="btn btn-primary" ng-click="ok()">确定</button>
+                        <button class="btn btn-default" ng-click="cancel()">取消</button>
+                    </div>
+                </script>
+            </div>
+            <!--删除成功弹窗-->
+            <div>
+                <script type="text/ng-template" id="removeEnd.html" >
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            提示
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="my-modal-content">
+                            <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                            <i class="fa fa-smile-o fa-3x text-success" ng-if="flag === 1"></i>
+                            <i class="fa fa-frown-o fa-3x text-warning" ng-if="flag === 2"></i>
+                            &nbsp;&nbsp;{{message}}
+                        </div>
+
+                    </div>
+                    <div class="modal-footer info-modal-footer">
+                        <button class="btn btn-primary" ng-click="ok()">确定</button>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div></div>

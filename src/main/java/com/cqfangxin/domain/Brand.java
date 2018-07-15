@@ -2,11 +2,12 @@ package com.cqfangxin.domain;
 
 import java.util.List;
 
-public class Brand {
+public class Brand extends BaseObject {
     private Integer id;
     private String name;
     private List<Category> cateList;
-    private Integer status;
+    private Boolean status;
+
 
     public Integer getId() {
         return id;
@@ -20,10 +21,10 @@ public class Brand {
     public void setName(String name) {
         this.name = name;
     }
-    public Integer getStatus() {
+    public Boolean getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

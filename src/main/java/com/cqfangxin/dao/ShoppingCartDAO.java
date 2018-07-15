@@ -17,22 +17,22 @@ public class ShoppingCartDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public int addToShoppingCart(ShoppingItem item){
+    public int addToShoppingCart(ShoppingItem item) {
         Integer userId = item.getUserId();
         Integer productId = item.getProduct().getId();
         Integer amount = item.getAmount();
         Integer itemCount = jdbcTemplate.queryForObject("select count(*) from shopping_cart where user_id = ? " +
-                        "and product_id = ?", new Object[]{userId, productId}, new RowMapper<Integer>() {
-                    @Override
-                    public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
-                        Integer count = resultSet.getInt(1);
-                        return count;
-                    }
-                });
-        if(itemCount > 0){
+                "and product_id = ?", new Object[]{userId, productId}, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+                Integer count = resultSet.getInt(1);
+                return count;
+            }
+        });
+        if (itemCount > 0) {
             return jdbcTemplate.update("update shopping_cart set amount = amount + ? where user_id = ? and product_id = ?",
                     amount, userId, productId);
-        }else{
+        } else {
             return jdbcTemplate.update("insert into shopping_cart(user_id, product_id, amount) values (?, ?, ?)",
                     userId, productId, amount);
         }

@@ -1,0 +1,219 @@
+<!--navbar header-->
+<div class="navbar-header {{app.settings.navbarHeaderColor}}">
+    <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
+        <i class="glyphicon glyphicon-cog"></i>
+    </button>
+    <button class="pull-right visible-xs" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll="app">
+        <i class="glyphicon glyphicon-align-justify"></i>
+    </button>
+    <!-- brand -->
+    <a ui-sref="app.dashboard" class="navbar-brand text-lt">
+        <span class="hidden-folded m-l-xs">芳馨食品</span>
+    </a>
+    <!-- / brand -->
+</div>
+<!--navbar header-->
+
+<!--navbar collapse-->
+<div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}" ng-controller="SetAdminCtrl">
+    <!--link and dropdown-->
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" dropdown>
+            <a href class="dropdown-toggle clear" dropdown-toggle>
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                <img ng-show="admin.sex == '女'" src="/img/femaleAvatar.jpeg" alt="...">
+                <img ng-show="admin.sex == '男'" src="/img/maleAvatar.jpeg" alt="...">
+                <i class="on md b-white bottom"></i>
+              </span>
+                <span class="hidden-sm hidden-md" ng-bind="admin.nickname"></span> <b class="caret"></b>
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu animated fadeInRight w" >
+                <li class="wrapper b-b m-b-sm bg-light m-t-n-xs">
+                    <span class="thumb-sm avatar pull-left m-t-n-sm m-b-n-sm m-l-sm">
+                        <img ng-show="admin.sex == '女'" src="/img/femaleAvatar.jpeg" alt="...">
+                        <img ng-show="admin.sex == '男'" src="/img/maleAvatar.jpeg" alt="...">
+                        <i class="on md b-white bottom"></i>
+                    </span>
+                    <span class="my-name" style="color: #999C9E;">{{admin.nickname}}</span> </b>
+                    <div style="clear: both;"></div>
+                </li>
+                <li >
+                    <a  style="color: #999C9E;" ng-click="open('setAdmin.html', 'updateAdminInfoModalCtrl', 'lg')">
+                        <!--<span class="badge bg-danger pull-right">30%</span>-->
+                        <i class="fa fa-user ace-icon" style="width: 15px;"></i>
+                        <span >个人信息设置</span>
+                    </a>
+                </li>
+                <!--<li>-->
+                <!--<a ui-sref="app.page.profile">Profile</a>-->
+                <!--</li>-->
+                <li >
+                    <a style="color: #999C9E;" ng-click="open('editAdminPwd.html', 'updateAdminPwdModalCtrl', 'md')">
+                        <!--<span class="label bg-info pull-right">new</span>-->
+                        <i class="fa fa-lock ace-icon " style="width: 15px;"></i>
+                        <span >个人密码修改</span>
+
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a ng-click="logout()" style="color: #999C9E;">
+                        <i class="fa fa-sign-out" style="width: 15px;"></i>
+                        <span>退出登录</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- / dropdown -->
+            <!--个人信息弹出框-->
+            <div>
+                <script type="text/ng-template" id="setAdmin.html">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            个人信息设置
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+                    </div>
+                    <form class="form-horizontal" name="form" class="form-validation">
+                        <div class="modal-body admin-modal" style="height: 200px">
+                            <div class="my-modal-content" >
+                                <div class="row text-center" style="padding-top: 10px;">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">用户名</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入用户名" value="{{admin.username}}" ng-model="admin.username" disabled>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">昵称</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入昵称" value="{{admin.nickname}}" ng-model="admin.nickname">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">真实姓名</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入姓名" value="{{admin.realname}}" ng-model="admin.realname">
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">性别</label>
+                                        <div class="col-sm-3">
+                                            <select  class="form-control" ng-model="admin.sex" required>
+                                                <option value="女" ng-selected="admin.sex == '女'">女</option>
+                                                <option value="男" ng-selected="admin.sex == '男'">男</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">电话</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入电话" value="{{admin.telephone}}" ng-model="admin.telephone" required>
+                                        </div>
+                                        <label class="col-sm-1 control-label no-padding-right">邮箱</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="请输入邮箱" value="{{admin.email}}" ng-model="admin.email" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                            </div>
+                        </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                            <i class="fa fa-check ace-icon bigger-110"></i>
+                            保存
+                        </button>
+                        <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                            <i class="fa fa-close ace-icon bigger-110"></i>
+                            取消
+                        </button>
+                    </div>
+                    </form>
+                </script>
+            </div>
+            <!--个人密码-->
+            <div>
+                <script type="text/ng-template" id="editAdminPwd.html">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            个人密码修改
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+                    </div>
+                    <form class="form-horizontal" name="form" class="form-validation">
+                    <div class="modal-body admin-modal" style="height: 150px">
+                        <div class="my-modal-content">
+                            <div class="row" style="padding-top: 10px;">
+                                <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label no-padding-right">新密码</label>
+                                            <div class="col-sm-5">
+                                                <input name="newPwd" type="password" class="form-control" placeholder="请输入新密码" ng-model="password" ng-minlength="3" ng-maxlength="10"  required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label no-padding-right">确认密码</label>
+                                            <div class="col-sm-5">
+                                                <input name="againPwd" type="password" class="form-control" placeholder="请再次输入新密码" ng-model="passwordAgain" ng-minlength="3" ng-maxlength="10"  required>
+                                            </div>
+                                        </div>
+
+                                </div>
+                                <!--<div class="text-danger wrapper text-center" ng-if="(form.newPwd.$dirty && form.newPwd.$error.required )|| (form.againPwd.$dirty && form.againPwd.$error.required)">请输入密码</div>-->
+                                <div class="text-danger wrapper text-center" ng-if="form.newPwd.$dirty && form.newPwd.$invalid && (password != '')">
+                                            <span ng-if="form.newPwd.$dirty && (form.newPwd.$error.maxlength || form.newPwd.$error.minlength)">
+                                                密码长度只能在3位和10位之间
+                                            </span>
+                                </div>
+                                <div class="text-danger wrapper text-center" ng-if="form.newPwd.$valid && form.againPwd.$valid">
+                                    <span ng-if="(password != passwordAgain) && form.againPwd.$dirty">两次密码输入不一致</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                            <i class="fa fa-check ace-icon bigger-110"></i>
+                            保存
+                        </button>
+                        <button type="reset" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-close ace-icon bigger-110"></i>
+                            关闭
+                        </button>
+                    </div>
+                    </form>
+                </script>
+            </div>
+            <!--操作成功弹出框-->
+            <div>
+                <script type="text/ng-template" id="opreateEnd.html" >
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            提示
+                            <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                        </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="my-modal-content">
+                            <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                            <i class="fa fa-smile-o fa-3x text-success" ng-if="flag === 1"></i>
+                            <i class="fa fa-frown-o fa-3x text-warning" ng-if="flag === 2"></i>
+                            &nbsp;&nbsp;{{message}}
+                        </div>
+
+                    </div>
+                    <div class="modal-footer info-modal-footer">
+                        <button class="btn btn-primary" ng-click="ok()">确定</button>
+                    </div>
+                </script>
+            </div>
+        </li>
+    </ul>
+</div>
+

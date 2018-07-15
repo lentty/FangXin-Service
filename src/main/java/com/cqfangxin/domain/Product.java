@@ -2,12 +2,15 @@ package com.cqfangxin.domain;
 
 import java.util.List;
 
-public class Product {
+public class Product extends BaseObject{
     private Integer id;
     private Integer catId;
     private Integer brandId;
     private String name;
     private String spec;
+    /**
+     * 0: invalid, 1: normal, 2: promoted
+     */
     private Integer status;
     private String unit;
     private Double tradePrice;
@@ -18,6 +21,9 @@ public class Product {
     private String origin;
     private String period;
     private List<ProductImage> images;
+    private List<ProductDetail> details;
+    private Brand brand;
+    private Category category;
 
     public Product(){
 
@@ -146,4 +152,27 @@ public class Product {
         this.images = images;
     }
 
+    public List<ProductDetail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<ProductDetail> details) {
+        this.details = details;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

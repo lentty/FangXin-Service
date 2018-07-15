@@ -1,0 +1,156 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="app.settings.asideFolded = false; app.settings.asideDock = false;"></div>
+
+<!--main-->
+<div class="col"  ng-controller="AppUserCtrl" >
+    <!--mian header-->
+    <div >
+        <div class="bg-light lter b-b my-nav wrapper-sm">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
+                        您当前所在的位置：<a ui-sref="app.users.app" class="my-address">用户列表</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md">
+            <div class="panel panel-default" style="position: relative; padding-top: 20px;">
+                <div class="table-responsive " style="overflow-x: hidden;"  >
+                    <section class="">
+                        <div class="col-xs-10">
+                            <div >
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                                </div>
+                                <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
+                                <div class="col-xs-2 no-padding-left">
+                                    <select ng-model="orderProp" class="form-control">
+                                        <option value="username">用户名</option>
+                                        <option value="lastModifiedDate">最近修改时间</option>
+                                    </select>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                    <form class="form-inline" style="padding-top: 15px;">
+
+                        <table class="table row-border hover table-striped dataTables_wrapper form-inline">
+                            <thead>
+                            <tr style="font-size: 16px;">
+                                <th class="text-center">用户名</th>
+                                <th class="text-center">昵称</th>
+                                <th class="text-center">真实姓名</th>
+                                <th class="text-center">性别</th>
+                                <th class="text-center">电话号码</th>
+                                <th class="text-center">邮箱</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">最近修改时间</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="admin in admins | filter: $ctrl.query | orderBy: orderProp" on-finish-render>
+                                <td class="text-center">{{admin.username}}</td>
+                                <td class="text-center">{{admin.nickname}}</td>
+                                <td class="text-center">{{admin.realname}}</td>
+                                <td class="text-center">{{admin.sex}}</td>
+                                <td class="text-center">{{admin.telephone}}</td>
+                                <td class="text-center">{{admin.email}}</td>
+                                <td class="text-center">{{admin.status ? '已激活' : '未激活'}}</td>
+                                <td class="text-center">{{admin.lastModifiedDate}}</td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)"
+                                           role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-tasks fa-fw"></i>更多操作<b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <li class="dropdown-item">
+                                                <button class="btn" ng-click="getAppUserDetail(admin.id)">查看详情</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <div style="float: left; padding: 20px 0 0 36px;">共{{totalItems}}条数据</div>
+                            <div style="clear: both;"></div>
+                        </div>
+
+                    </form>
+                    <!--管理员详情弹窗-->
+                    <div>
+                        <script type="text/ng-template" id="getAppUserDetail.html">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    用户详情
+                                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                                </h4>
+                            </div>
+                            <div class="modal-body user-modal">
+                                <div class="user-modal-content">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td>用户名</td>
+                                            <td>{{admin.username}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>昵称</td>
+                                            <td>{{admin.nickname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>真实姓名</td>
+                                            <td>{{admin.realname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>性别</td>
+                                            <td>{{admin.sex}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>电话号码</td>
+                                            <td>{{admin.telephone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>邮箱</td>
+                                            <td>{{admin.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>状态</td>
+                                            <td>{{admin.status ? '已激活' : '未激活'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>创建者</td>
+                                            <td>{{admin.createBy}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>创建时间</td>
+                                            <td>{{admin.createDate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>最近修改人</td>
+                                            <td>{{admin.lastModifiedBy}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>最近修改时间</td>
+                                            <td>{{admin.lastModifiedDate}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

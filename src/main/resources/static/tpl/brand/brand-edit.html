@@ -1,0 +1,219 @@
+<div class="bg-light lter b-b wrapper-sm">
+    <h1 class="m-n font-thin h5 my-rooms ">
+        您当前所在的位置：
+        <a ui-sref="app.system.admin" class="my-address">品牌管理</a>
+        &nbsp;<i class="fa fa-lg fa-angle-right"></i>&nbsp;
+        <a ui-sref="app.system.addAdmin" class="my-address">品牌编辑</a>
+    </h1>
+</div>
+<div class="wrapper-md">
+    <div class="panel panel-default" style="position: relative; padding-top: 20px;" ng-controller="editBrandCtrl">
+        <div class="panel-body">
+            <div class="row">
+                <label class="col-sm-1 no-padding-right text-center my-label"><span>*</span>品牌名称：</label>
+                <div class="col-sm-3">
+                    <span class="text-left" >{{brand.name}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-1 no-padding-right text-center my-label"><span>*</span>状态：</label>
+                <div class="col-sm-1">
+                    <span class="text-left">{{brand.status ? '上架' : '下架'}}</span>
+                </div>
+            </div>
+            <div class="row" style="position: relative; padding-left: 20px;padding-top: 20px;" >
+                <button class="btn box-shadow my-button bg-info" ng-click="upsertCategory(brand.id, null)" >
+                    <i class="fa fa-floppy-o bigger-120"></i>
+                    <span>添加分类</span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                <tr style="font-size: 16px;">
+                    <th class="col-sm-2 text-left">分类名称</th>
+                    <th class="col-sm-2 text-left">图片</th>
+                    <th class="col-sm-2 text-left">最近修改时间</th>
+                    <th class="col-sm-2 text-left">最近修改人</th>
+                    <th class="col-sm-2 text-left">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="category in brand.cateList" on-finish-render>
+                    <td class="col-sm-2 text-left">{{category.name}}</td>
+                    <td class="col-sm-2 text-left"><img ng-src="{{category.imageSrc}}" height="100px" width="100px"/></td>
+                    <td class="col-sm-2 text-left">{{category.lastModifiedDate}}</td>
+                    <td class="col-sm-2 text-left">{{category.lastModifiedBy}}</td>
+                    <td class="col-sm-2 text-left">
+                        <ul>
+                            <li>
+                                <button class="btn btn-xs" type="button" ng-click="upsertCategory(brand.id, category)">
+                                    <span>更改名字</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-xs" type="button" ng-click="editCategoryPic(category.id)">
+                                    <span>上传图片</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-xs" type="button" ng-click="deleteCategory(category.id, category.name)">
+                                    <span>删除</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="col-sm-6">
+
+                <button type="reset" class="btn btn-default"  ng-click="reset()">
+                    <i class="fa fa-close ace-icon bigger-110"></i>
+                    清空数据
+                </button>
+                <button type="submit" class="btn btn-primary" ng-click="submit()" ng-disabled="form.$invalid">
+                    <i class="fa fa-check ace-icon bigger-110"></i>
+                    保存
+                </button>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <!--管理分类弹窗-->
+    <div>
+        <script type="text/ng-template" id="upsertCategory.html">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    管理分类
+                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                </h4>
+            </div>
+            <form class="form-horizontal" name="form" class="form-validation">
+                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                <div class="modal-body user-modal" style="height: 100px">
+                    <div class="user-modal-content" >
+                        <div class="row" style="padding-top: 10px;">
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label text-left" style="margin-left: 10px;">分类名称:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" ng-model="category.name" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                        <i class="fa fa-check ace-icon bigger-110"></i>
+                        保存
+                    </button>
+                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                        <i class="fa fa-close ace-icon bigger-110"></i>
+                        取消
+                    </button>
+                </div>
+            </form>
+        </script>
+    </div>
+    <!--编辑图片弹窗-->
+    <div>
+        <script type="text/ng-template" id="editCatePic.html">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    编辑图片
+                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                </h4>
+            </div>
+            <form class="form-horizontal" name="form" class="form-validation">
+                <div class="modal-body user-modal" style="height: 150px">
+                    <div class="user-modal-content" >
+                        <div class="row" style="padding-top: 10px;">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label  text-left" style="margin-left: 10px;">图片:</label>
+                                <div class="col-sm-5">
+                                    <input type="file" ngf-select ng-model="categoryPic" name="file"
+                                           accept="image/*" ngf-max-size="200KB" required ngf-model-invalid="errorFile"/>
+                                    <i ng-show="form.file.$error.maxSize">文件太大
+                                        {{errorFile.size / 1000000|number:1}}MB: 最大 200KB</i>
+                                    <img ng-show="form.file.$valid" ng-src="{{category.imageSrc}}" ngf-thumbnail="categoryPic" class="thumb">
+                                    <button ng-click="categoryPic = null" ng-show="categoryPic">删除</button>
+                                    <button ng-click="uploadPic(categoryPic)">上传</button>
+                                    <!-- <input type="file" file-model="categoryPic">
+                                     <img alt="配图预览" ng-src="{{category.imageSrc}}" width="100px" height="100px"/>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-danger wrapper text-center" ng-show="successMsg">{{successMsg}}</div>
+                        <div class="row text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">
+                        <i class="fa fa-check ace-icon bigger-110"></i>
+                        完成
+                    </button>
+                    <button type="reset" class="btn btn-default"  ng-click="cancel()">
+                        <i class="fa fa-close ace-icon bigger-110"></i>
+                        取消
+                    </button>
+                </div>
+            </form>
+        </script>
+    </div>
+    <!--删除提示框-->
+    <div>
+        <script type="text/ng-template" id="deleteCateConfirmation.html" >
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    提示
+                    <span class="pull-right my-cancel">
+                                            <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                                        </span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="my-modal-content">
+                    <i class="fa fa-question-circle fa-3x text-warning warning-icon"></i>
+                    &nbsp;&nbsp;是否确定删除 分类&nbsp;{{name}}&nbsp;？
+                </div>
+                <div class="text-danger wrapper text-center" ng-show="errorMsg">{{errorMsg}}</div>
+            </div>
+            <div class="modal-footer info-modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">确定</button>
+                <button class="btn btn-default" ng-click="cancel()">取消</button>
+            </div>
+        </script>
+    </div>
+    <!--添加成功提示框-->
+    <div>
+        <script type="text/ng-template" id="addEnd.html" >
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    提示
+                    <span class="pull-right my-cancel">
+                                <i class="fa fa-times bigger-120 fa-lg" ng-click="cancel()"></i>
+                            </span>
+                </h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="my-modal-content">
+                    <!--<i class="fa fa-info-circle fa-3x text-warning warning-icon"></i>-->
+                    <i class="fa fa-smile-o fa-3x text-success" ng-if="flag === 1"></i>
+                    <i class="fa fa-frown-o fa-3x text-warning" ng-if="flag === 2"></i>
+                    &nbsp;&nbsp;{{message}}
+                </div>
+
+            </div>
+            <div class="modal-footer info-modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">确定</button>
+            </div>
+        </script>
+    </div>
+</div>

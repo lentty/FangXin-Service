@@ -1,23 +1,20 @@
 package com.cqfangxin.service;
 
-import com.cqfangxin.dao.BrandDAO;
 import com.cqfangxin.domain.Brand;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.cqfangxin.domain.Pagination;
 
 import java.util.List;
 
-@Service
-public class BrandService {
 
-    @Autowired
-    private BrandDAO brandDao;
+public interface BrandService {
 
-    public List<Brand> getBrandList(){
-        return brandDao.getBrandList();
-    }
+    List<Brand> getBrandList();
 
-    public List<Brand> getAllBrands(){
-        return brandDao.getAllBrands();
-    }
+    List<Brand> getBrandsByPage(Pagination pagination);
+
+    Brand getBrandById(Integer id);
+
+    int upsertBrand(Brand brand, String userId);
+
+    int deleteBrandById(Integer id);
 }

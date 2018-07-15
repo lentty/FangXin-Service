@@ -1,6 +1,6 @@
 package com.cqfangxin.domain;
 
-public class Category {
+public class Category extends BaseObject{
     private Integer id;
     private Integer brandId;
     private String  name;

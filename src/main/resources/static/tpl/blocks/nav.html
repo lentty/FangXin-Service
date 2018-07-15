@@ -1,0 +1,84 @@
+    <!--list-->
+<ul class="nav">
+    <li ui-sref-active="active">
+        <a ui-sref="app.dashboard">
+            <i class=" fa fa-area-chart bigger-120 "></i>
+            <span class="font-bold">首页</span>
+        </a>
+    </li>
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>信息管理</span>
+    </li>
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-tasks fa-fw"></i>
+            <span class="font-bold">品牌管理</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>品牌管理</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.brands">
+                    <span>品牌列表</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-tasks fa-fw"></i>
+            <span class="font-bold">商品管理</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>商品管理</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.products">
+                    <span>商品列表</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="icon-users fa-fw"></i>
+            <span class="font-bold">用户管理</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>用户管理</span>
+                </a>
+            </li>
+            <li ng-show = "userRoleType == 2" ui-sref-active="active">
+                <a ui-sref="app.users.admins">
+                    <span>管理员</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.users.app">
+                    <span>App用户</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="line dk"></li>
+</ul>
