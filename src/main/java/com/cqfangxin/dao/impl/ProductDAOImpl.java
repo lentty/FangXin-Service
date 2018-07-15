@@ -29,7 +29,7 @@ public class ProductDAOImpl implements ProductDAO {
     public List<Product> getProductsByPage(Pagination pagination){
         int offset = pagination.getStart();
         int limit = pagination.getLength();
-        return jdbcTemplate.query("select * from product order by last_modified_date desc limit ?,? ",
+        return jdbcTemplate.query("select * from product order by last_modified_date,id desc limit ?,? ",
                 new Object[]{offset, limit}, new ProductRowMapper());
     }
 

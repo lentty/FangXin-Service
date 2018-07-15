@@ -64,7 +64,7 @@ public class BrandDAOImpl implements BrandDAO{
         int offset = pagination.getStart();
         int limit = pagination.getLength();
         pagination.setTotalCount(getTotalBrandCount());
-        return jdbcTemplate.query("select * from brand order by last_modified_date desc limit ?,? ", new Object[]{offset, limit},
+        return jdbcTemplate.query("select * from brand order by last_modified_date, brand_id desc limit ?,? ", new Object[]{offset, limit},
                 new BrandRowMapper());
     }
 
