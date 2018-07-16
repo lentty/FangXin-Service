@@ -23,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public int getTotalProductCount(){
-        return productDAO.getTotalProductCount();
+    public int getTotalProductCount(Pagination pagination){
+        return productDAO.getTotalProductCount(pagination);
     }
 
     @Override

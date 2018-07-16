@@ -88,14 +88,14 @@ public class ProductController {
         }
     }
 
-    @RequestMapping(value = "/totalCount", method = RequestMethod.GET)
+    @RequestMapping(value = "/totalCount", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTotalProductCount(HttpSession session) {
+    public Result getTotalProductCount(@RequestBody Pagination<Product> pagination, HttpSession session) {
         User user = (User) session.getAttribute(Constant.USERINFO);
         if (user == null) {
             return new Result("fail", Constant.DEAL_FAIL);
         } else {
-            int numOfProduct = productService.getTotalProductCount();
+            int numOfProduct = productService.getTotalProductCount(pagination);
             TableDataResult resultObj = new TableDataResult();
             resultObj.setTotalCount(numOfProduct);
             return new Result("success", Constant.DEAL_SUCCESS, resultObj);

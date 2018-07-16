@@ -13,7 +13,10 @@ app.controller('ProductCtrl',
             length: $scope.maxSize
         };
         $scope.orderProp = "lastModifiedDate";
-        var getProductData = function(){
+        var getProductData = function(brandId, cateId){
+            console.log('get product data with brand_id: ' + brandId + ',cate_id: ' + cateId);
+            $scope.pager.brandId = brandId;
+            $scope.pager.cateId = cateId;
             $http({
                 url: '/product/admin',
                 method: 'POST',
@@ -32,9 +35,15 @@ app.controller('ProductCtrl',
                     console.log('请求失败');
                 })
         };
-        var getTotalCount = function(){
-            $http.get('/product/totalCount')
-                .success(function (data) {
+        var getTotalCount = function(brandId, cateId){
+            $scope.pager.brandId = brandId;
+            $scope.pager.cateId = cateId;
+            $http({
+                url: '/product/totalCount',
+                method: 'POST',
+                dataType: 'json',
+                data: $scope.pager
+            }).success(function (data) {
                     if(data.resultCode == 'success'){
                         $scope.totalItems = data.object.totalCount;
                         console.log('numOfProduct: '+$scope.totalItems);
@@ -46,25 +55,41 @@ app.controller('ProductCtrl',
                 .error(function () {
                     console.log('请求失败');
                 })
-        }
+        };
+        $scope.brandList = [];
+        var getBrandList = function () {
+            $http.get('/brand/list')
+                .success(function (data) {
+                    $scope.brandList = data;
+                })
+                .error(function () {
+                    console.log('请求失败');
+                    $scope.errorMsg = '请求失败';
+                });
+        };
         var init = function () {
+            getBrandList();
             getProductData();
             getTotalCount();
         };
         init();
-        $scope.getData = function () {
-            console.log('到这了');
-            console.log($scope.currentPage);
-            $scope.start = ($scope.currentPage - 1) * 10 + 1;
-            console.log($scope.start);
-            $scope.pager = {
-                draw: $scope.currentPage,
-                start: $scope.start,
-                length: $scope.maxSize
-            };
-            console.log($scope.pager);
-            getProductData();
+        $scope.searchProduct = function(brandId, cateId){
+            $scope.totalItems = 0;
+            $scope.currentPage = 1;
+            $scope.pager.start = 0;
+            $scope.pager.draw = $scope.currentPage;
+            $scope.pager.length = 10;
+            getProductData(brandId, cateId);
+            getTotalCount(brandId, cateId);
         };
+        $scope.getData = function () {
+            $scope.pager.start = ($scope.currentPage - 1) * 10 + 1;
+            $scope.pager.draw = $scope.currentPage;
+            $scope.pager.length = $scope.maxSize;
+            console.log($scope.pager);
+            getProductData($scope.pager.brandId, $scope.pager.cateId);
+        };
+
         $scope.getProductDetail = function(productId){
             console.log('get product detail');
             var modalInstance = $modal.open({

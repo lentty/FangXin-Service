@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-xs-4">
                     <h1 class="m-n font-thin h5 text-black pull-left my-rooms ">
-                        您当前所在的位置：<a ui-sref="app.rooms" class="my-address">产品信息列表</a>
+                        您当前所在的位置：<a ui-sref="app.products" class="my-address">产品信息列表</a>
                     </h1>
                 </div>
             </div>
@@ -27,8 +27,14 @@
                                     </button>
                                 </div>
                                 <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >查询：</label>
-                                <div class="col-xs-2 no-padding-left">
-                                    <input type="text" class="form-control" placeholder="请输入..." ng-model="$ctrl.query">
+                                <div class="col-xs-4 no-padding-left">
+                                    <select class="col-xs-2 no-padding-left" style="width: auto" ng-model="brand" ng-options="item.name for item in brandList">
+                                        <option value="">请选择品牌</option>
+                                    </select>
+                                    <select class="col-xs-1 no-padding-left" style="width: auto" ng-model="category" ng-options="data.name for data in brand.cateList">
+                                        <option value="">请选择分类</option>
+                                    </select>
+                                    <button class="col-xs-1 no-padding-left" ng-click="searchProduct(brand.id, category.id)"><i class="fa fa-search"></i></button>
                                 </div>
                                 <label class="col-xs-2 control-label no-padding-right my-label no-padding-left text-right" >排序：</label>
                                 <div class="col-xs-2 no-padding-left">
@@ -61,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="product in products | filter: $ctrl.query | orderBy: orderProp" on-finish-render>
+                                <tr ng-repeat="product in products | orderBy: orderProp" on-finish-render>
                                     <td class="text-center">{{product.code}}</td>
                                     <td class="text-center">{{product.name}}</td>
                                     <td class="text-center">{{product.spec}}</td>

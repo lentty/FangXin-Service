@@ -11,7 +11,7 @@ public interface ProductService {
 
      List<Product> getProductsByPage(Pagination pagination);
 
-     int getTotalProductCount();
+     int getTotalProductCount(Pagination pagination);
 
      int upsertProduct(Product product, String username);
 

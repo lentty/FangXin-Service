@@ -49,6 +49,26 @@ public class Pagination<T> {
      */
     private int endIndex;
 
+    private Integer brandId;
+
+    private Integer cateId;
+
+    public Integer getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
+    }
+
+    public Integer getCateId() {
+        return cateId;
+    }
+
+    public void setCateId(Integer cateId) {
+        this.cateId = cateId;
+    }
+
     public void setPageNum(int pageNum) {
         if(pageNum <= 0){
             pageNum = PAGE_NUM;

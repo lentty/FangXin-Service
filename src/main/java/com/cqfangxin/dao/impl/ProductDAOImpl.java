@@ -29,20 +29,71 @@ public class ProductDAOImpl implements ProductDAO {
     public List<Product> getProductsByPage(Pagination pagination){
         int offset = pagination.getStart();
         int limit = pagination.getLength();
-        return jdbcTemplate.query("select * from product order by last_modified_date,id desc limit ?,? ",
-                new Object[]{offset, limit}, new ProductRowMapper());
+        List<Object> objects = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from product ");
+        sql.append(generateWhereClause(pagination, objects));
+        sql.append("order by last_modified_date,id desc limit ?,?");
+        objects.add(offset);
+        objects.add(limit);
+        Object[] params = new Object[objects.size()];
+        for(int i = 0; i < objects.size(); i++){
+            params[i] = objects.get(i);
+        }
+        logger.info("get product pagnation sql is : " + sql.toString());
+        logger.info("params: "+objects);
+        List<Product> result = jdbcTemplate.query(sql.toString(), params, new ProductRowMapper());
+        logger.info("result is : "+ result);
+        return result;
+    }
+
+    private String generateWhereClause(Pagination pagination, List<Object> objects){
+        Integer brandId = pagination.getBrandId();
+        Integer cateId = pagination.getCateId();
+        StringBuilder sql = new StringBuilder();
+        if(brandId != null){
+            sql.append("where brand_id = ? ");
+            objects.add(brandId);
+            if(cateId != null){
+                sql.append("and cat_id = ? ");
+                objects.add(cateId);
+            }
+        }
+        return  sql.toString();
     }
 
     @Override
-    public int getTotalProductCount() {
-        return jdbcTemplate.queryForObject("select count(1) from product",
-                new RowMapper<Integer>() {
-                    @Override
-                    public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
-                        Integer totalCount = resultSet.getInt(1);
-                        return totalCount;
-                    }
-                });
+    public int getTotalProductCount(Pagination pagination) {
+
+        StringBuilder sql = new StringBuilder();
+        List<Object> objects = new ArrayList<>();
+        sql.append("select count(1) from product ");
+        sql.append(generateWhereClause(pagination, objects));
+        logger.info("get product total count sql is : "+sql.toString());
+        if (!objects.isEmpty()) {
+            Object[] params = new Object[objects.size()];
+            for (int i = 0; i < objects.size(); i++) {
+                params[i] = objects.get(i);
+            }
+            logger.info("params: "+objects);
+            return jdbcTemplate.queryForObject(sql.toString(), params,
+                    new RowMapper<Integer>() {
+                        @Override
+                        public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+                            Integer totalCount = resultSet.getInt(1);
+                            return totalCount;
+                        }
+                    });
+        } else {
+            return jdbcTemplate.queryForObject(sql.toString(),
+                    new RowMapper<Integer>() {
+                        @Override
+                        public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+                            Integer totalCount = resultSet.getInt(1);
+                            return totalCount;
+                        }
+                    });
+        }
     }
 
     @Override
