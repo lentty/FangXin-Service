@@ -43,14 +43,9 @@ public class ProductController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Result getProductById(@PathVariable("id")Integer productId, HttpSession session) {
-        User user = (User) session.getAttribute(Constant.USERINFO);
-        if (user == null) {
-            return new Result("fail", Constant.DEAL_FAIL);
-        } else {
-            Product product = productService.getProductById(productId);
-            return new Result("success", Constant.DEAL_SUCCESS, product);
-        }
+    public Result getProductById(@PathVariable("id") Integer productId) {
+        Product product = productService.getProductById(productId);
+        return new Result("success", Constant.DEAL_SUCCESS, product);
     }
 
     @RequestMapping(value = "/promotedImages", method = RequestMethod.GET)

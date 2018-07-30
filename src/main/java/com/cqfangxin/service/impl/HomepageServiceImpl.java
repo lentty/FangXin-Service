@@ -35,8 +35,8 @@ public class HomepageServiceImpl implements HomepageService {
         homepageVO.setNumOfUser(userDao.getNumOfUser());
         Map<Integer, Integer> productTypeMap = productDao.getNumOfProduct();
         if(!CollectionUtils.isEmpty(productTypeMap)){
-            homepageVO.setNumOfProduct(productTypeMap.get(1));
-            homepageVO.setNumOfPromotedProduct(productTypeMap.get(2));
+            homepageVO.setNumOfProduct(productTypeMap.get(1) == null ? 0 : productTypeMap.get(1));
+            homepageVO.setNumOfPromotedProduct(productTypeMap.get(2) == null ? 0 : productTypeMap.get(2));
         }
         logger.info(homepageVO.toString());
         return homepageVO;

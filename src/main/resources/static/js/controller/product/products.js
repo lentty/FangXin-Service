@@ -1,22 +1,21 @@
 'use strict';
 
 app.controller('ProductCtrl',
-    function ($scope, $resource, $http, $state, $modal, $log) {
+    function ($scope, $resource, $http, $state, $modal, $log, $window) {
         $scope.products = [];
         $scope.start = 0;
         $scope.maxSize = 10;
         $scope.totalItems = 0;
         $scope.currentPage = 1;
+        $scope.brand = {};
+        $scope.category = {};
         $scope.pager = {
             draw: $scope.currentPage,
             start: $scope.start,
             length: $scope.maxSize
         };
         $scope.orderProp = "lastModifiedDate";
-        var getProductData = function(brandId, cateId){
-            console.log('get product data with brand_id: ' + brandId + ',cate_id: ' + cateId);
-            $scope.pager.brandId = brandId;
-            $scope.pager.cateId = cateId;
+        var getProductData = function(){
             $http({
                 url: '/product/admin',
                 method: 'POST',
@@ -26,6 +25,7 @@ app.controller('ProductCtrl',
                 if(data.resultCode == 'success'){
                     console.log(data);
                     $scope.products = data.object.data;
+                    $window.sessionStorage.setItem('pager', JSON.stringify($scope.pager));
                 }else if(data.resultCode == 'no_login_user'){
                     console.log('用户还未登录');
                     $state.go('access.signin');
@@ -35,9 +35,7 @@ app.controller('ProductCtrl',
                     console.log('请求失败');
                 })
         };
-        var getTotalCount = function(brandId, cateId){
-            $scope.pager.brandId = brandId;
-            $scope.pager.cateId = cateId;
+        var getTotalCount = function(){
             $http({
                 url: '/product/totalCount',
                 method: 'POST',
@@ -61,6 +59,24 @@ app.controller('ProductCtrl',
             $http.get('/brand/list')
                 .success(function (data) {
                     $scope.brandList = data;
+                    if($scope.brandList){
+                        var stickyBrandId = $scope.pager.brandId;
+                        var stickyCateId = $scope.pager.cateId;
+                        if(stickyBrandId){
+                           angular.forEach($scope.brandList, function(value){
+                                    if(value.id == stickyBrandId){
+                                         $scope.brand = value;
+                                         if(stickyCateId){
+                                             angular.forEach($scope.brand.cateList, function(value){
+                                                  if(value.id == stickyCateId){
+                                                      $scope.category = value;
+                                                  }
+                                             });
+                                         }
+                                    }
+                              });
+                        }
+                    }
                 })
                 .error(function () {
                     console.log('请求失败');
@@ -68,6 +84,11 @@ app.controller('ProductCtrl',
                 });
         };
         var init = function () {
+            var page = JSON.parse($window.sessionStorage.getItem('pager'));
+            console.log('get pager from session:' + page);
+            if(page){
+               $scope.pager = page;
+            }
             getBrandList();
             getProductData();
             getTotalCount();
@@ -79,15 +100,17 @@ app.controller('ProductCtrl',
             $scope.pager.start = 0;
             $scope.pager.draw = $scope.currentPage;
             $scope.pager.length = 10;
-            getProductData(brandId, cateId);
-            getTotalCount(brandId, cateId);
+            $scope.pager.brandId = brandId;
+            $scope.pager.cateId = cateId;
+            getProductData();
+            getTotalCount();
         };
         $scope.getData = function () {
             $scope.pager.start = ($scope.currentPage - 1) * 10 + 1;
             $scope.pager.draw = $scope.currentPage;
             $scope.pager.length = $scope.maxSize;
             console.log($scope.pager);
-            getProductData($scope.pager.brandId, $scope.pager.cateId);
+            getProductData();
         };
 
         $scope.getProductDetail = function(productId){

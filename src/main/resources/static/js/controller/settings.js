@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('SetAdminCtrl',
-    function ($rootScope, $scope, $http,$localStorage, $modal, $state) {
+    function ($rootScope, $scope, $http,$localStorage, $modal, $state, $window) {
         $rootScope.admin = $localStorage.admin;//用户登录后，本地存储用户信息
         console.log($rootScope.admin);
         $scope.open = function (template, ctrl, size) {
@@ -18,8 +18,7 @@ app.controller('SetAdminCtrl',
         };
         $scope.logout = function logout() {
             delete $localStorage.admin;
-            console.log($scope.admin);//输出0
-            console.log($localStorage.admin);//什么都没输出，$localStorage没有admin
+            $window.sessionStorage.removeItem('pager');
             $http({
                 url: '/user/logout',
                 method: 'GET'

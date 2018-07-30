@@ -54,6 +54,9 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
         })
     };
 
+    $scope.ok = function(){
+       history.back();
+    };
 
     $scope.uploadAll = function(uploader){
         angular.forEach(uploader.queue, function (item) {
