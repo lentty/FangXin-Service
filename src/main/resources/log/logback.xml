@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration scan="true">
+    <property resource="log/logback.properties" />
+
+    <!-- 控制台日志配置 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 格式化 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} [%p] [%t] %c{36} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- info级别日志控制 -->
+    <appender name="FILE_INFO"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${logback.path}/server-info.log</file>
+        <!-- 是否追加 默认为true -->
+        <append>true</append>
+        <!-- 滚动策略 日期+大小 策略 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/server-info.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <!-- 格式化 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} [%p] [%t] %c{36} - %m%n</pattern>
+        </encoder>
+        <!-- 级别过滤 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- ERROR级别日志控制 -->
+    <appender name="ERROR_INFO"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${logback.path}/server-error.log</file>
+        <!-- 是否追加 默认为true -->
+        <append>true</append>
+        <!-- 滚动策略 日期+大小 策略 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/server-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <!-- 格式化 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} [%p] [%t] %c{36} - %m%n</pattern>
+        </encoder>
+        <!-- 级别过滤 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <root level="${logback.level}">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="ERROR_INFO" />
+    </root>
+</configuration>
