@@ -33,8 +33,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductListByCatId(Integer categoryId){
-        return productDAO.getProductListByCatId(categoryId);
+    public List<Product> getProductListByBrandId(Integer brandId){
+        return productDAO.getProductListByBrandId(brandId);
     }
 
     @Override

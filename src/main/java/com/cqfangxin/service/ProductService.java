@@ -15,7 +15,7 @@ public interface ProductService {
 
      int upsertProduct(Product product, String username);
 
-     List<Product> getProductListByCatId(Integer categoryId);
+     List<Product> getProductListByBrandId(Integer brandId);
 
      Product getProductById(Integer productId);
 

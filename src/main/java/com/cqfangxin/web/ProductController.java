@@ -37,8 +37,8 @@ public class ProductController {
 
     @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Product> getProductListByCatId(@PathVariable("id")Integer catId) {
-        return productService.getProductListByCatId(catId);
+    public List<Product> getProductListByBrandId(@PathVariable("id")Integer brandId) {
+        return productService.getProductListByBrandId(brandId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

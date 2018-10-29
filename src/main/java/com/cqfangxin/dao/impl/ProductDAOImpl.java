@@ -203,9 +203,9 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductListByCatId(Integer categoryId) {
-        return jdbcTemplate.query("select * from product where cat_id = ? and status != 0",
-                new Object[]{categoryId}, new ProductRowMapper());
+    public List<Product> getProductListByBrandId(Integer brandId) {
+        return jdbcTemplate.query("select * from product where brand_id = ? and status != 0",
+                new Object[]{brandId}, new ProductRowMapper());
     }
 
     @Override
