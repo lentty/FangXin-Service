@@ -177,7 +177,14 @@ public class ProductController {
             logger.info("absolute File Path: " + absolutePath);
             String storePath = relativePath + productPic.getOriginalFilename();
             int status = productService.editPicById(productId, storePath, user.getUsername());
-            if (status > 0) {
+            ProductImage image =  new ProductImage();
+            image.setProductId(productId);
+            image.setFileType(1);
+            image.setFileName(productPic.getOriginalFilename());
+            image.setFileLocation(storePath);
+            image.setFileSize(productPic.getSize());
+            int generatedId = productService.editPicDetailsById(image);
+            if (status > 0 || generatedId > 0) {
                 return new Result("success", status);
             } else {
                 return new Result("fail", status);
