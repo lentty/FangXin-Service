@@ -56,7 +56,7 @@ app.controller('ProductCtrl',
         };
         $scope.brandList = [];
         var getBrandList = function () {
-            $http.get('/brand/list')
+            $http.get('/brand/all')
                 .success(function (data) {
                     $scope.brandList = data;
                     if($scope.brandList){

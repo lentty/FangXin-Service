@@ -38,41 +38,41 @@ public class BrandDAOImpl implements BrandDAO{
                 });
     }
 
-//    @Override
-//    public List<Brand> getBrandList(){
-//        Map<Integer, Brand> brandMap = new HashMap<>();
-//        jdbcTemplate.query("select * from brand b left outer join category c on b.brand_id = c.brand_id where brand_status = 1",
-//                new RowMapper<Void>() {
-//                    @Override
-//                    public Void mapRow(ResultSet resultSet, int i) throws SQLException {
-//                        Integer brand_id = resultSet.getInt("b.brand_id");
-//                        Brand brand = brandMap.get(brand_id);
-//                        if(brand == null){
-//                            brand = new Brand();
-//                            brand.setId(brand_id);
-//                            brand.setName(resultSet.getString("b.brand_name"));
-//                            brand.setStatus(resultSet.getBoolean("b.brand_status"));
-//                            brandMap.put(brand_id, brand);
-//                        }
-//                        List<Category> cateList = brand.getCateList();
-//                        if(cateList == null){
-//                            cateList = new ArrayList<>();
-//                            brand.setCateList(cateList);
-//                        }
-//                        Category cat = new Category();
-//                        Integer cate_id = resultSet.getInt("c.cat_id");
-//                        if(cate_id != 0){
-//                            cat.setId(cate_id);
-//                            cat.setBrandId(resultSet.getInt("c.brand_id"));
-//                            cat.setName(resultSet.getString("c.cat_name"));
-//                            cat.setImageSrc(resultSet.getString("c.image_src"));
-//                            cateList.add(cat);
-//                        }
-//                        return null;
-//                    }
-//                });
-//        return new ArrayList<>(brandMap.values());
-//    }
+    @Override
+    public List<Brand> getBrandsAndCates(){
+        Map<Integer, Brand> brandMap = new HashMap<>();
+        jdbcTemplate.query("select * from brand b left outer join category c on b.brand_id = c.brand_id where brand_status = 1",
+                new RowMapper<Void>() {
+                    @Override
+                    public Void mapRow(ResultSet resultSet, int i) throws SQLException {
+                        Integer brand_id = resultSet.getInt("b.brand_id");
+                        Brand brand = brandMap.get(brand_id);
+                        if(brand == null){
+                            brand = new Brand();
+                            brand.setId(brand_id);
+                            brand.setName(resultSet.getString("b.brand_name"));
+                            brand.setStatus(resultSet.getBoolean("b.brand_status"));
+                            brandMap.put(brand_id, brand);
+                        }
+                        List<Category> cateList = brand.getCateList();
+                        if(cateList == null){
+                            cateList = new ArrayList<>();
+                            brand.setCateList(cateList);
+                        }
+                        Category cat = new Category();
+                        Integer cate_id = resultSet.getInt("c.cat_id");
+                        if(cate_id != 0){
+                            cat.setId(cate_id);
+                            cat.setBrandId(resultSet.getInt("c.brand_id"));
+                            cat.setName(resultSet.getString("c.cat_name"));
+                            cat.setImageSrc(resultSet.getString("c.image_src"));
+                            cateList.add(cat);
+                        }
+                        return null;
+                    }
+                });
+        return new ArrayList<>(brandMap.values());
+    }
 
 
     @Override
@@ -80,7 +80,7 @@ public class BrandDAOImpl implements BrandDAO{
         int offset = pagination.getStart();
         int limit = pagination.getLength();
         pagination.setTotalCount(getTotalBrandCount());
-        return jdbcTemplate.query("select * from brand order by last_modified_date, brand_id desc limit ?,? ", new Object[]{offset, limit},
+        return jdbcTemplate.query("select * from brand order by last_modified_date desc, brand_id desc limit ?,? ", new Object[]{offset, limit},
                 new BrandRowMapper());
     }
 
@@ -156,6 +156,7 @@ public class BrandDAOImpl implements BrandDAO{
             Brand brand = new Brand();
             brand.setId(resultSet.getInt("brand_id"));
             brand.setName(resultSet.getString("brand_name"));
+            brand.setImageSrc(resultSet.getString("image_src"));
             brand.setStatus(resultSet.getBoolean("brand_status"));
             brand.setCreateDate(TimeFormatUtil.timeFormat(resultSet.getString("create_date")));
             brand.setCreateBy(resultSet.getString("create_by"));
@@ -163,5 +164,11 @@ public class BrandDAOImpl implements BrandDAO{
             brand.setLastModifiedBy(resultSet.getString("last_modified_by"));
             return brand;
         }
+    }
+
+    @Override
+    public int editPicById(Integer brandId, String imageSrc, String userId){
+        return jdbcTemplate.update("update brand set image_src = ?, last_modified_date = ?, last_modified_by = ?  where brand_id = ?",
+                new Object[]{imageSrc, TimeFormatUtil.formatTime(), userId, brandId});
     }
 }

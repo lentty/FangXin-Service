@@ -33,7 +33,7 @@ public class ProductDAOImpl implements ProductDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("select * from product ");
         sql.append(generateWhereClause(pagination, objects));
-        sql.append("order by last_modified_date,id desc limit ?,?");
+        sql.append("order by last_modified_date desc, id desc limit ?,?");
         objects.add(offset);
         objects.add(limit);
         Object[] params = new Object[objects.size()];

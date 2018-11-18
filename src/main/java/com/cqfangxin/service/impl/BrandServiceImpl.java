@@ -26,6 +26,11 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public List<Brand> getBrandsAndCates(){
+        return brandDao.getBrandsAndCates();
+    }
+
+    @Override
     public List<Brand> getBrandsByPage(Pagination pagination){
         return brandDao.getBrandsByPage(pagination);
     }
@@ -45,5 +50,10 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public int deleteBrandById(Integer id){
         return brandDao.deleteBrandById(id);
+    }
+
+    @Override
+    public int editPicById(Integer brandId, String imageSrc, String userId){
+        return brandDao.editPicById(brandId, imageSrc, userId);
     }
 }

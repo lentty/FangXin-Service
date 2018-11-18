@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface BrandDAO {
     List<Brand> getBrandList();
+    List<Brand> getBrandsAndCates();
     List<Brand> getBrandsByPage(Pagination pagination);
     int getNumOfBrand();
     int getTotalBrandCount();
     Brand getBrandById(Integer id);
     int upsertBrand(Brand brand, String userId);
     int deleteBrandById(Integer id);
+    int editPicById(Integer brandId, String imageSrc, String userId);
 }

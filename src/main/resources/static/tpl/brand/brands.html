@@ -51,7 +51,7 @@
                                 <th class="text-center">最近修改时间</th>
                                 <th class="text-center">最近修改人</th>
                                 <th class="text-center">上/下架</th>
-                                <th class="text-center">分类管理</th>
+                                <th class="text-center">图片管理</th>
                                 <th class="text-center">修改</th>
                                 <th class="text-center">删除</th>
                             </tr>
@@ -64,15 +64,18 @@
                                 <td class="text-center">{{brand.status ? '正常' : '下架'}}</td>
                                 <td class="text-center">
                                     <a ui-sref="app.brand({brandId: brand.id})">
-                                        <span class="glyphicon glyphicon-edit"  title="编辑"></span>
+                                        <img width="20px" height="20px" src="/img/manage.png"/>
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-xs" type="button" ng-click="upsertBrand(brand)"><i class="fa fa-eye text-success fa-2x"></i></button>
+                                    <!--<button class="btn btn-xs" type="button" ng-click="upsertBrand(brand)">-->
+                                        <!--<i class="fa fa-eye text-success fa-2x"></i>-->
+                                        <img width="20px" height="20px" ng-click="upsertBrand(brand)" src="/img/edit.png"/>
+                                    <!--</button>-->
                                 </td>
                                 <td class="text-center">
                                   <span name="trash" title="删除"
-                                  style="cursor: pointer" class="glyphicon glyphicon-trash" ng-click="deleteBrand(brand.id, brand.name)"></span>
+                                  style="cursor: pointer"  ng-click="deleteBrand(brand.id, brand.name)"><img width="20px" height="20px" src="/img/delete.png"/></span>
                                 </td>
                             </tr>
 

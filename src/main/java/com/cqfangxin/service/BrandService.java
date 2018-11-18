@@ -10,6 +10,8 @@ public interface BrandService {
 
     List<Brand> getBrandList();
 
+    List<Brand> getBrandsAndCates();
+
     List<Brand> getBrandsByPage(Pagination pagination);
 
     Brand getBrandById(Integer id);
@@ -17,4 +19,6 @@ public interface BrandService {
     int upsertBrand(Brand brand, String userId);
 
     int deleteBrandById(Integer id);
+
+    int editPicById(Integer brandId, String imageSrc, String userId);
 }

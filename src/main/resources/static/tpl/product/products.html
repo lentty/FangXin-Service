@@ -81,14 +81,14 @@
                                     </td>
                                     <td class="text-center">
                                         <a ui-sref="app.product({productId: product.id})">
-                                            <span class="glyphicon glyphicon-edit"  title="编辑"></span>
+                                            <img width="20px" height="20px" src="/img/manage.png"/>
                                         </a>
                                     </td>
                                     <td class="text-center">
                                         <div class="dropdown">
                                             <a class="btn btn-secondary dropdown-toggle" href="javascript:void(0)"
                                                role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-tasks fa-fw"></i>更多操作<b class="caret"></b>
+                                                <img width="20px" height="20px" src="/img/more.png" />
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                 <li class="dropdown-item">
@@ -223,19 +223,19 @@
                                     <div class="user-modal-content" >
                                         <div class="row" style="padding-top: 10px;">
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">产品条码</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>产品条码</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.code" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">产品名称</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>产品名称</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.name" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">品牌分类</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>品牌分类</label>
                                                 <div class="form-inline col-sm-5">
                                                     <select class="form-control" style="width: auto" ng-model="brand" ng-options="item.name for item in brandList">
                                                         <option value="">请选择品牌</option>
@@ -246,7 +246,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label no-padding-right">状态</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>状态</label>
                                                 <div class="col-sm-5">
                                                     <select class="form-control" style="width: auto" ng-model="product.status" required>
                                                         <option value="0" ng-selected="product.status == 0">下架</option>
@@ -256,37 +256,38 @@
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">产品规格</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>产品规格</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.spec" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">单位</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>单位</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.unit" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">批发价</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>批发价</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.tradePrice" required>
                                                 </div>
                                            </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">零售价</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>零售价</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.retailPrice" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">库存</label>
+                                                <label class="col-sm-2 control-label no-padding-right"><text style="color: red">*</text>库存</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.amount" required>
                                                 </div>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="col-sm-2 control-label no-padding-right">产地</label>
+                                                <label class="col-sm-2 control-label no-padding-right">
+                                                    产地</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control" ng-model="product.origin">
                                                 </div>
@@ -294,7 +295,7 @@
                                             <div class="form-group" >
                                                 <label class="col-sm-2 control-label no-padding-right">保质期</label>
                                                 <div class="col-sm-5">
-                                                    <input type="text" class="form-control" ng-model="product.period" required>
+                                                    <input type="text" class="form-control" ng-model="product.period">
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-repeat="detail in product.details">

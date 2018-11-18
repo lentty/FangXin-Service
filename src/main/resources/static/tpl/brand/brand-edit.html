@@ -21,19 +21,46 @@
                     <span class="text-left">{{brand.status ? '上架' : '下架'}}</span>
                 </div>
             </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr style="font-size: 16px;">
+                <th class="col-sm-2 text-left">名称</th>
+                <th class="col-sm-2 text-left">图片</th>
+                <th class="col-sm-2 text-left">最近修改时间</th>
+                <th class="col-sm-2 text-left">最近修改人</th>
+                <th class="col-sm-2 text-left">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr on-finish-render>
+                <td class="col-sm-2 text-left">{{brand.name}}</td>
+                <td class="col-sm-2 text-left"><img ng-src="{{brand.imageSrc}}" height="100px" width="100px"/></td>
+                <td class="col-sm-2 text-left">{{brand.lastModifiedDate}}</td>
+                <td class="col-sm-2 text-left">{{brand.lastModifiedBy}}</td>
+                <td class="col-sm-2 text-left">
+                    <ul>
+                        <li>
+                            <button class="btn btn-xs" type="button" ng-click="editBrandPic(brand.id)">
+                                <span>上传图片</span>
+                            </button>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
             <div class="row" style="position: relative; padding-left: 20px;padding-top: 20px;" >
                 <button class="btn box-shadow my-button bg-info" ng-click="upsertCategory(brand.id, null)" >
                     <i class="fa fa-floppy-o bigger-120"></i>
                     <span>添加分类</span>
                 </button>
             </div>
-        </div>
-        <div class="panel-body">
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                 <tr style="font-size: 16px;">
-                    <th class="col-sm-2 text-left">分类名称</th>
-                    <th class="col-sm-2 text-left">图片</th>
+                    <th class="col-sm-2 text-left">名称</th>
                     <th class="col-sm-2 text-left">最近修改时间</th>
                     <th class="col-sm-2 text-left">最近修改人</th>
                     <th class="col-sm-2 text-left">操作</th>
@@ -42,7 +69,6 @@
                 <tbody>
                 <tr ng-repeat="category in brand.cateList" on-finish-render>
                     <td class="col-sm-2 text-left">{{category.name}}</td>
-                    <td class="col-sm-2 text-left"><img ng-src="{{category.imageSrc}}" height="100px" width="100px"/></td>
                     <td class="col-sm-2 text-left">{{category.lastModifiedDate}}</td>
                     <td class="col-sm-2 text-left">{{category.lastModifiedBy}}</td>
                     <td class="col-sm-2 text-left">
@@ -50,11 +76,6 @@
                             <li>
                                 <button class="btn btn-xs" type="button" ng-click="upsertCategory(brand.id, category)">
                                     <span>更改名字</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-xs" type="button" ng-click="editCategoryPic(category.id)">
-                                    <span>上传图片</span>
                                 </button>
                             </li>
                             <li>
@@ -68,14 +89,8 @@
                 </tbody>
             </table>
             <div class="col-sm-6">
-
-                <button type="reset" class="btn btn-default"  ng-click="reset()">
-                    <i class="fa fa-close ace-icon bigger-110"></i>
-                    清空数据
-                </button>
-                <button type="submit" class="btn btn-primary" ng-click="submit()" ng-disabled="form.$invalid">
-                    <i class="fa fa-check ace-icon bigger-110"></i>
-                    保存
+                <button type="submit" class="btn btn-primary" ng-click="navigateBack()" >
+                    返回
                 </button>
             </div>
             <div style="clear: both;"></div>
@@ -121,7 +136,7 @@
     </div>
     <!--编辑图片弹窗-->
     <div>
-        <script type="text/ng-template" id="editCatePic.html">
+        <script type="text/ng-template" id="editBrandPic.html">
             <div class="modal-header">
                 <h4 class="modal-title">
                     编辑图片

@@ -345,13 +345,13 @@ app.controller('ModalInstanceCtrl4', function ($scope, $http, $modalInstance, $w
             $modalInstance.dismiss();
         };
     })
-    .controller('editCatePicModalCtrl', function ($scope, Upload, $http, $state, $modalInstance, cateId){
+    .controller('editBrandPicModalCtrl', function ($scope, Upload, $http, $state, $modalInstance, brandId){
         $scope.errorMsg = null;
         $scope.successMsg = null;
         $scope.uploadPic = function(file) {
             Upload.upload({
-                url: '/category/upload',
-                data: {cateId: cateId, file: file}
+                url: '/brand/upload',
+                data: {brandId: brandId, file: file}
             }).then(function (response) {
                 console.log('response data: '+ response.data);
                 if(response.data.resultCode == 'success'){
@@ -443,7 +443,7 @@ app.controller('ModalInstanceCtrl4', function ($scope, $http, $modalInstance, $w
         $scope.brandList = [];
         $rootScope.brandList = [];
         var init = function () {
-            $http.get('/brand/list')
+            $http.get('/brand/all')
                 .success(function (data) {
                         $scope.brandList = data;
                         $rootScope.brandList = data;

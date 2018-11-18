@@ -48,15 +48,15 @@ app.controller('editBrandCtrl', function ($scope,$state, $http ,$stateParams, $m
         });
     };
 
-    $scope.editCategoryPic = function(cateId){
-        console.log('edit pic for catId: ' + cateId);
+    $scope.editBrandPic = function(brandId){
+        console.log('edit pic for brandId: ' + brandId);
         var modalInstance = $modal.open({
-            templateUrl: 'editCatePic.html',
-            controller: 'editCatePicModalCtrl',
+            templateUrl: 'editBrandPic.html',
+            controller: 'editBrandPicModalCtrl',
             size: 'md',
             resolve: {
-                cateId: function () {
-                    return cateId;
+                brandId: function () {
+                    return brandId;
                 }
             }
         });
@@ -94,6 +94,10 @@ app.controller('editBrandCtrl', function ($scope,$state, $http ,$stateParams, $m
 
     $scope.reset = function () {
         $scope.brand = {};
+    };
+
+    $scope.navigateBack = function(){
+       history.back();
     };
 
     $scope.submit = function () {
