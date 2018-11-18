@@ -5,9 +5,17 @@ import java.util.List;
 public class Brand extends BaseObject {
     private Integer id;
     private String name;
+    private String imageSrc;
     private List<Category> cateList;
     private Boolean status;
 
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
 
     public Integer getId() {
         return id;
