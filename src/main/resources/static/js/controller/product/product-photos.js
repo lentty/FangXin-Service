@@ -21,7 +21,7 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
     });
 
     var uploader1 = $scope.uploader1 = new FileUploader({
-        url: '/product/uploadForDetails',
+        url: '/product/upload',
         queueLimit: 1
     });
     function DownloadedFileItem(uploader, file){
