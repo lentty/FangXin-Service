@@ -143,7 +143,7 @@ public class ProductController {
         if (user == null) {
             return new Result("fail", Constant.NO_LOGIN_USER);
         } else {
-            int status = productService.deleteProductPicById(productImage.getFileId());
+            int status = productService.deleteProductPicById(productImage, user.getUsername());
             if (status > 0) {
                 logger.info("Successfully delete product image id " + productImage.getFileId() + " in product_image table");
                 int retCode = storageService.deleteFile(productImage.getFileLocation());
@@ -176,16 +176,15 @@ public class ProductController {
             String absolutePath = storageService.store(productPic, relativePath);
             logger.info("absolute File Path: " + absolutePath);
             String storePath = relativePath + productPic.getOriginalFilename();
-            int status = productService.editPicById(productId, storePath, user.getUsername());
             ProductImage image =  new ProductImage();
             image.setProductId(productId);
             image.setFileType(1);
             image.setFileName(productPic.getOriginalFilename());
             image.setFileLocation(storePath);
             image.setFileSize(productPic.getSize());
-            int generatedId = productService.editPicDetailsById(image);
-            if (status > 0 || generatedId > 0) {
-                return new Result("success", status);
+            int status = productService.editPicById(image, user.getUsername());
+            if (status > 0) {
+                return new Result("success", "", image);
             } else {
                 return new Result("fail", status);
             }

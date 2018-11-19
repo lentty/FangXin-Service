@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.sql.*;
@@ -204,7 +206,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<Product> getProductListByBrandId(Integer brandId) {
-        return jdbcTemplate.query("select * from product where brand_id = ? and status != 0",
+        return jdbcTemplate.query("select * from product where brand_id = ? and status != 0 order by last_modified_date desc, id desc",
                 new Object[]{brandId}, new ProductRowMapper());
     }
 
@@ -266,7 +268,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<Product> getPromotedProducts(){
-        return jdbcTemplate.query("select * from product where status = 2", new ProductRowMapper());
+        return jdbcTemplate.query("select * from product where status = 2 order by last_modified_date desc, id desc", new ProductRowMapper());
     }
 
     @Override
@@ -278,7 +280,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<Product> getProductList(){
-        return jdbcTemplate.query("select * from product", new ProductRowMapper());
+        return jdbcTemplate.query("select * from product order by last_modified_date desc, id desc", new ProductRowMapper());
     }
 
     @Override

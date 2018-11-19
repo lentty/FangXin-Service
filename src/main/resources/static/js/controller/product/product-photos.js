@@ -40,7 +40,7 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
         $http({
             url: '/product/deletePic/',
             method: 'POST',
-            data: {fileId: that.file.id, fileLocation: that.file.src}
+            data: {productId: that.file.productId, fileId: that.file.id, fileType: that.file.type, fileLocation: that.file.src}
         }).success(function (data) {
             if (data.resultCode == 'success') {
                 that.uploader.removeFromQueue(that);
@@ -100,12 +100,14 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
                     console.log($scope.product);
                     angular.forEach($scope.product.images, function (value, key) {
                         if(value.fileType == 2){
-                            var file = {id: value.fileId, src: value.fileLocation, name: value.fileName, size: value.fileSize};
+                            var file = {productId: productId, id: value.fileId, src: value.fileLocation, name: value.fileName, size: value.fileSize,
+                            type: value.fileType};
                             var fileItem = new DownloadedFileItem(uploader, file);
                             uploader.queue.push(fileItem);
                         }
                         if(uploader1.queue.length == 0 && value.fileType == 1){
-                            var file = {id: value.fileId, src: value.fileLocation, name: value.fileName, size: value.fileSize};
+                            var file = {productId: productId, id: value.fileId, src: value.fileLocation, name: value.fileName, size: value.fileSize,
+                            type: value.fileType};
                             var fileItem = new DownloadedFileItem(uploader1, file);
                             uploader1.queue.push(fileItem);
                         }
@@ -171,7 +173,7 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
     };
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
         var data = response.object;
-        var file = {id: data.fileId, src: data.fileLocation, name: data.fileName, size: data.fileSize};
+        var file = {productId: data.productId, id: data.fileId, src: data.fileLocation, name: data.fileName, size: data.fileSize, type: data.fileType};
         var newFileItem = new DownloadedFileItem(uploader, file);
         var index = this.getIndexOfItem(fileItem);
         uploader.queue[index] = newFileItem;
@@ -216,8 +218,8 @@ app.controller('editProductPhotoCtrl', function ($scope, $rootScope, FileUploade
     };
     uploader1.onSuccessItem = function(fileItem, response, status, headers) {
         var data = response.object;
-        var file = {id: data.fileId, src: data.fileLocation, name: data.fileName, size: data.fileSize};
-        var newFileItem = new DownloadedFileItem(uploader, file);
+        var file = {productId: data.productId, id: data.fileId, src: data.fileLocation, name: data.fileName, size: data.fileSize, type: data.fileType};
+        var newFileItem = new DownloadedFileItem(uploader1, file);
         var index = this.getIndexOfItem(fileItem);
         uploader1.queue[index] = newFileItem;
         console.info('onSuccessItem', newFileItem, response, status, headers);

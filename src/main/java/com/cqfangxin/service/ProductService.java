@@ -31,10 +31,10 @@ public interface ProductService {
 
      int saveProduct(Product product);
 
-     int editPicById(Integer productId, String imageSrc, String userId);
+     int editPicById(ProductImage image, String userId);
 
      int editPicDetailsById(ProductImage image);
 
-     int deleteProductPicById(Integer picId);
+     int deleteProductPicById(ProductImage productImage, String userId);
 
 }
