@@ -6,11 +6,14 @@ import com.cqfangxin.domain.User;
 import com.cqfangxin.utils.TimeFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -90,11 +93,40 @@ public class UserDAOImpl implements UserDAO {
                 user.getId()});
     }
 
+    @Override
+    public int saveOpenId(String openId) {
+        if(StringUtils.isEmpty(openId)){
+            return -1;
+        }
+        List<User> userList = jdbcTemplate.query("select * from user where open_id = ?",
+                new Object[]{openId}, new UserRowMapper());
+        if(userList == null || userList.isEmpty()){
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            int status = jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("insert into user(open_id) values (?)");
+                    PreparedStatement ps = connection.prepareStatement(sb.toString(), Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, openId);
+                    return ps;
+                }
+            }, keyHolder);
+            if (status > 0) {
+                return keyHolder.getKey().intValue();
+            } else {
+                return -1;
+            }
+        }
+        return userList.get(0).getId();
+    }
+
     class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException{
             User user = new User();
             user.setId(resultSet.getInt("id"));
+            user.setOpenId(resultSet.getString("open_id"));
             user.setType(resultSet.getInt("type"));
             user.setUsername(resultSet.getString("username"));
             user.setNickname(resultSet.getString("nickname"));

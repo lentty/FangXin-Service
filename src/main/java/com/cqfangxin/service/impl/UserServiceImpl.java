@@ -2,15 +2,17 @@ package com.cqfangxin.service.impl;
 
 import com.cqfangxin.dao.UserDAO;
 import com.cqfangxin.domain.LoginBean;
-import com.cqfangxin.domain.Result;
 import com.cqfangxin.domain.User;
 import com.cqfangxin.service.UserService;
 import com.cqfangxin.utils.MD5;
+import com.cqfangxin.utils.WxMappingJackson2HttpMessageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private Environment env;
 
     @Override
     public User getUser(LoginBean loginUser){
@@ -59,5 +64,23 @@ public class UserServiceImpl implements UserService {
     public int editPassword(User user){
         user.setPassword(MD5.digest(user.getPassword()));
         return userDAO.editPassword(user);
+    }
+
+    @Override
+    public int getUserId(String code) {
+        String appId = env.getProperty("app.appId");
+        String appSecrect = env.getProperty("app.appSecrect");
+        String apiPrefix = "https://api.weixin.qq.com/sns/jscode2session?";
+        String url = apiPrefix + "appid=" + appId + "&secret=" + appSecrect + "&js_code=" + code + "&grant_type=authorization_code";
+        logger.info("wechat api url: " + url);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
+        LoginBean loginBean = restTemplate.getForObject(url, LoginBean.class);
+        if(loginBean != null){
+            String openId = loginBean.getOpenid();
+            logger.info("open id is: " + openId);
+            return userDAO.saveOpenId(openId);
+        }
+        return -1;
     }
 }

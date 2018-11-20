@@ -12,4 +12,5 @@ public interface UserService {
     int editUser(User user, String username);
     int deleteUserById(Integer id);
     int editPassword(User user);
+    int getUserId(String code);
 }

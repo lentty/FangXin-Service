@@ -5,6 +5,7 @@ public class User extends BaseObject{
      /**
       * 0 normal user, 1 admin
       * */
+     private String openId;
      private Integer type;
      private String username;
      private String nickname;
@@ -22,6 +23,14 @@ public class User extends BaseObject{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public Integer getType() {

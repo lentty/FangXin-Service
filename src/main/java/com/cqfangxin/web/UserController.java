@@ -7,6 +7,7 @@ import com.cqfangxin.service.UserService;
 import com.cqfangxin.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -116,6 +117,19 @@ public class UserController {
             session.removeAttribute(Constant.USERINFO);
             return new Result("success", Constant.DEAL_SUCCESS, loginUser);
         }
+    }
+
+    @RequestMapping(value = "/login/{code}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getOpenId(@PathVariable("code") String code) {
+        if(StringUtils.isEmpty(code)){
+            return new Result("-1", Constant.ILLEGAL_ARGUMENT);
+        }
+        int userId = userService.getUserId(code);
+        if(userId != -1){
+            return new Result("0", Constant.SUCCESS, userId);
+        }
+        return new Result("-1", Constant.ERROR);
     }
 
 }
