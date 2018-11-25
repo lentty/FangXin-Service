@@ -221,7 +221,7 @@ public class ProductDAOImpl implements ProductDAO {
         if(product == null ){
             return product;
         }
-        List<ProductImage> images = jdbcTemplate.query("select * from product_image where product_id = ?",
+        List<ProductImage> images = jdbcTemplate.query("select * from product_image where product_id = ? order by type",
                 new Object[]{productId}, new RowMapper<ProductImage>() {
                     @Override
                     public ProductImage mapRow(ResultSet resultSet, int i) throws SQLException {
